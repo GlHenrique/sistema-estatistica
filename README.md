@@ -1,6 +1,7 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Este projeto foi criado com [Create React App](https://github.com/facebook/create-react-app).
 
 ## Sistema estatístca
+:triangular_ruler:
 
 Este projeto tem o intuito de fazer cálculos para Estatística Aplicada.
 ### `yarn start`
