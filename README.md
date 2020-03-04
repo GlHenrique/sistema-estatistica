@@ -1,22 +1,33 @@
-Este projeto foi criado com [Create React App](https://github.com/facebook/create-react-app).
+<div>
+    <div>
+        Este projeto foi criado com <a href="https://github.com/facebook/create-react-app">Create React App</a>
+    </div>
+</div>
+
 
 ### Sistema estatística :triangular_ruler: 
 
 Este projeto é resultado de todos conhecimentos adquiridos 
-na disciplina de Estatística Aplicada no 3º Período de ADS na Fatec Franca.
+na disciplina de Estatística Aplicada no 3º Período de ADS na [Fatec Franca](https://site.fatecfranca.edu.br/).
 
 ### Mapa Mental :game_die:
 
-![Kitten](mapaMental.png)
+![Kitten](src/assets/mapa_mental.png)
 
 <i>*Mapa mental desenvolvido com [XMind](https://www.xmind.net/)</i>
-### `Quero testar! Como?`
 
-Para utilizar em ambiente de desenvolvimento é simples!<br />
+### Quero testar! Como?
 
-<code>git clone https://github.com/GlHenrique/sistema-estatistica.git</code> <br>
-Depois de clonado, basta rodar <code>yarn install</code> no diretório do projeto.<br>
-E finalmente <code>yarn start</code>
+Para utilizar em ambiente de desenvolvimento é simples!.<br />
+
+1) <code>git clone https://github.com/GlHenrique/sistema-estatistica.git</code>
+
+2) <code>cd sistema-estatistica</code>
+
+3) <code>yarn install</code>
+
+4) <code>yarn start</code>
+
 
 
 ## Learn More
