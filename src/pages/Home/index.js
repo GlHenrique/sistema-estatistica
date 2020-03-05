@@ -8,7 +8,8 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import Button from '@material-ui/core/Button';
-import { useStyles} from "./styles";
+import { useStyles } from "./styles";
+import app from "../../base";
 
 export default function Home() {
     const classes = useStyles();
@@ -59,8 +60,7 @@ export default function Home() {
                                 open={open}
                                 onClose={handleClose}
                             >
-                                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                                <MenuItem onClick={handleClose}>My account</MenuItem>
+                                <MenuItem onClick={() => app.auth().signOut()}>Logout</MenuItem>
                             </Menu>
                         </div>
                     </Toolbar>
