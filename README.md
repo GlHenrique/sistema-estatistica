@@ -12,7 +12,7 @@ na disciplina de Estatística Aplicada no 3º Período de ADS na [Fatec Franca](
 
 ### Mapa Mental :game_die:
 
-![Kitten](src/assets/mapa_mental.png)
+![Kitten](src/assets/images/mapa_mental.png)
 
 <i>*Mapa mental desenvolvido com [XMind](https://www.xmind.net/)</i>
 
