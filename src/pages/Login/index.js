@@ -9,7 +9,8 @@ import {
     Grid,
     Typography,
     InputAdornment,
-    IconButton
+    IconButton,
+    CircularProgress
 } from '@material-ui/core';
 import {
     useStyles,
@@ -40,6 +41,7 @@ function Login({history}) {
     const [isPassword, setIsPassword] = useState(true);
     const [wrongPassword, setWrongPassword] = useState(false);
     const [userNotFound, setUserNotFound] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (!email) {
@@ -57,6 +59,7 @@ function Login({history}) {
     const handleLogin = useCallback(
         async event => {
             event.preventDefault();
+            setLoading(true);
             const {email, senha} = event.target.elements;
             await app.auth().signInWithEmailAndPassword(email.value, senha.value)
                 .then(() => {
@@ -73,6 +76,8 @@ function Login({history}) {
                             document.getElementsByName('email')[0].focus();
                             break;
                     }
+                }).finally(() => {
+                    setLoading(false);
                 });
         }, [history]
     );
@@ -141,7 +146,8 @@ function Login({history}) {
                             color="primary"
                             className={classes.submit} style={{height: '48px'}}
                         >
-                            Sign In
+                            {loading ? <CircularProgress style={{color: 'rgb(220, 0, 78)'}} />
+                            : 'Entrar'}
                         </Button>
                         <Grid container>
                             <Grid item xs>
