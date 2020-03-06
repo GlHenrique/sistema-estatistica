@@ -35,8 +35,8 @@ function Login({history}) {
 
     const classes = useStyles();
 
-    const [errorEmail, setErrorEmail] = useState(false);
     const [email, setEmail] = useState('');
+    const [errorEmail, setErrorEmail] = useState(false);
     const [password, setPassword] = useState('');
     const [isPassword, setIsPassword] = useState(true);
     const [wrongPassword, setWrongPassword] = useState(false);
