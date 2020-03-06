@@ -11,7 +11,7 @@ import Button from '@material-ui/core/Button';
 import { useStyles } from "./styles";
 import app from "../../base";
 
-export default function Home() {
+export default function Home({props}) {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
