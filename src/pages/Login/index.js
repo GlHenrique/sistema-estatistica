@@ -44,20 +44,14 @@ function Login({history}) {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        if (!email) {
-            setErrorEmail(false);
-            setUserNotFound(false);
-            return
-        }
-        if (userNotFound) {
-            setUserNotFound(false);
-        }
-        let result = FormValidators.emailValidator(email);
-        setErrorEmail(!result);
+        console.log(email);
     }, [email]);
 
     const handleLogin = useCallback(
         async event => {
+            if (errorEmail) {
+                console.log('teste')
+            }
             event.preventDefault();
             setLoading(true);
             const {email, senha} = event.target.elements;
