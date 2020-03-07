@@ -2,7 +2,7 @@ import * as firebase from "firebase/app";
 import "firebase/auth";
 
 const app = firebase.initializeApp({
-        apiKey: "AIzaSyBe7_UZdPMrUEPVHY_ngJKgAV1CFNMpMkk",
+    apiKey: "AIzaSyBe7_UZdPMrUEPVHY_ngJKgAV1CFNMpMkk",
     authDomain: "lookup-7c92b.firebaseapp.com",
     databaseURL: "https://lookup-7c92b.firebaseio.com",
     projectId: "lookup-7c92b",

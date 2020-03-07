@@ -44,22 +44,30 @@ function Login({history}) {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        console.log(email);
+        setUserNotFound(false);
+        if (email) {
+            if (!FormValidators.emailValidator(email)) {
+                setErrorEmail(true);
+                return;
+            }
+            setErrorEmail(false);
+        }
     }, [email]);
 
     const handleLogin = useCallback(
         async event => {
-            if (errorEmail) {
-                console.log('teste')
-            }
             event.preventDefault();
             setLoading(true);
             const {email, senha} = event.target.elements;
             await app.auth().signInWithEmailAndPassword(email.value, senha.value)
-                .then(() => {
-                    history.push('/');
+                .then((res) => {
+                    setLoading(false);
+                    setTimeout(() => {
+                        history.push('/');
+                    }, 100);
                 })
                 .catch((error) => {
+                    setLoading(false);
                     switch (error.code) {
                         case 'auth/wrong-password':
                             setWrongPassword(true);
@@ -70,9 +78,7 @@ function Login({history}) {
                             document.getElementsByName('email')[0].focus();
                             break;
                     }
-                }).finally(() => {
-                    setLoading(false);
-                });
+                })
         }, [history]
     );
 
@@ -138,10 +144,11 @@ function Login({history}) {
                             fullWidth
                             variant="contained"
                             color="primary"
+                            disabled={errorEmail || userNotFound}
                             className={classes.submit} style={{height: '48px'}}
                         >
-                            {loading ? <CircularProgress style={{color: 'rgb(220, 0, 78)'}} />
-                            : 'Entrar'}
+                            {loading ? <CircularProgress style={{color: 'rgb(220, 0, 78)'}}/>
+                                : 'Entrar'}
                         </Button>
                         <Grid container>
                             <Grid item xs>
