@@ -20,7 +20,7 @@ import app from "../../base";
 import { withRouter } from 'react-router';
 import FormValidators from "../../utils/validators";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
-import logo from '../../assets/logos/lookup.png';
+import logo from '../../assets/logos/lookup-density.png';
 
 function Copyright() {
     return (
@@ -97,9 +97,7 @@ function Login({history}) {
             <Grid item xs={false} sm={4} md={7} className={classes.image}/>
             <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
                 <div className={classes.paper}>
-                    <Typography component="h1" variant="h5">
-                        Login
-                    </Typography>
+                    <img alt="Lookup" src={logo} />
                     <form className={classes.form} onSubmit={handleLogin}>
                         <TextField
                             variant="outlined"

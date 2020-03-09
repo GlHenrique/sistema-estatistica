@@ -1,13 +1,23 @@
 import React from 'react';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
+import {
+    AppBar,
+    Button,
+    Drawer,
+    Divider,
+    List,
+    ListItem,
+    ListItemIcon,
+    ListItemText,
+    Toolbar,
+    Typography,
+    IconButton,
+    MenuItem,
+    Menu,
+} from '@material-ui/core';
+import InboxIcon from '@material-ui/icons/MoveToInbox';
+import MailIcon from '@material-ui/icons/Mail';
 import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
-import Button from '@material-ui/core/Button';
 import { useStyles } from "./styles";
 import app from "../../base";
 
@@ -24,12 +34,52 @@ export default function Home({props}) {
         setAnchorEl(null);
     };
 
+    const [state, setState] = React.useState({
+        top: false,
+        left: false,
+        bottom: false,
+        right: false,
+    });
+
+    const toggleDrawer = (side, open) => event => {
+        if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+            return;
+        }
+
+        setState({ ...state, [side]: open });
+    };
+
+    const sideList = side => (
+        <div
+            className={classes.list}
+            role="presentation"
+            onClick={toggleDrawer(side, false)}
+            onKeyDown={toggleDrawer(side, false)}
+        >
+            <List>
+                {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+                    <ListItem button key={text}>
+                        <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                        <ListItemText primary={text} />
+                    </ListItem>
+                ))}
+            </List>
+        </div>
+    );
+
     return (
         <>
             <div className={classes.root}>
+                <Drawer open={state.left} onClose={toggleDrawer('left', false)}>
+                    {sideList('left')}
+                </Drawer>
                 <AppBar position="static">
                     <Toolbar>
-                        <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+                        <IconButton
+                            edge="start"
+                            className={classes.menuButton}
+                            onClick={toggleDrawer('left', true)}
+                            color="inherit" aria-label="menu">
                             <MenuIcon/>
                         </IconButton>
                         <Typography variant="h6" className={classes.title}>
@@ -66,9 +116,6 @@ export default function Home({props}) {
                     </Toolbar>
                 </AppBar>
             </div>
-            <Button variant="contained" color="secondary">
-                Secondary
-            </Button>
         </>
     );
 }
