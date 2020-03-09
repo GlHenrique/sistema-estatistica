@@ -1,13 +1,24 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import NotFound from "./pages/error/NotFound";
-import LadingPage from "./pages/LandingPage";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import SignUp from "./pages/SignUp";
+import { AuthProvider } from "./auth/Auth";
+import PrivateRoute from "./auth/PrivateRoute";
+
 
 export default function Routes() {
     return (
-        <Switch>
-            <Route path="/" exact={true} component={LadingPage}/>
-            <Route path="**" component={NotFound}/>
-        </Switch>
+        <AuthProvider>
+            <BrowserRouter>
+                <Switch>
+                    <PrivateRoute exact path="/" component={Home}/>
+                    <Route exact path="/login" component={Login}/>
+                    <Route exact path="/signup" component={SignUp}/>
+                    <Route path="**" component={NotFound}/>
+                </Switch>
+            </BrowserRouter>
+        </AuthProvider>
     )
 }
