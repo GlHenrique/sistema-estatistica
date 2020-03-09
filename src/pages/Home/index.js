@@ -11,6 +11,10 @@ import {
     IconButton,
     MenuItem,
     Menu,
+    Card,
+    CardActionArea,
+    Button,
+    Grid, CardContent, CardActions
 } from '@material-ui/core';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
@@ -44,7 +48,7 @@ export default function Home() {
             return;
         }
 
-        setState({ ...state, [side]: open });
+        setState({...state, [side]: open});
     };
 
     const drawerList = side => (
@@ -57,8 +61,8 @@ export default function Home() {
             <List>
                 {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
                     <ListItem button key={text}>
-                        <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                        <ListItemText primary={text} />
+                        <ListItemIcon>{index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}</ListItemIcon>
+                        <ListItemText primary={text}/>
                     </ListItem>
                 ))}
             </List>
@@ -113,6 +117,32 @@ export default function Home() {
                         </div>
                     </Toolbar>
                 </AppBar>
+                <Grid container>
+                    <Card className={classes.card}>
+                        <CardActionArea
+                            className={classes.media}
+                            image="https://source.unsplash.com/random"
+                            title="Estatística Descritiva"
+                        >
+                            <CardContent>
+                                <Typography gutterBottom variant="h5" component="h2">
+                                    Lizard
+                                </Typography>
+                                <Typography variant="body2" color="textSecondary" component="p">
+                                    Lizards are ....
+                                </Typography>
+                            </CardContent>
+                        </CardActionArea>
+                        <CardActions>
+                            <Button size="small" color="primary">
+                                Share
+                            </Button>
+                            <Button size="small" color="primary">
+                                Learn More
+                            </Button>
+                        </CardActions>
+                    </Card>
+                </Grid>
             </div>
         </>
     );

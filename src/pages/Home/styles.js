@@ -15,5 +15,11 @@ export const useStyles = makeStyles(theme => ({
     },
     fullList: {
         width: 'auto'
+    },
+    card: {
+        maxWidth: 400
+    },
+    cardMedia: {
+        height: 140
     }
 }));
