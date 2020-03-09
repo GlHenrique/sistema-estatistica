@@ -13,8 +13,7 @@ import {
     CircularProgress
 } from '@material-ui/core';
 import {
-    useStyles,
-    Logo
+    useStyles
 } from './styles';
 import app from "../../base";
 import { withRouter } from 'react-router';
@@ -60,7 +59,7 @@ function Login({history}) {
             setLoading(true);
             const {email, senha} = event.target.elements;
             await app.auth().signInWithEmailAndPassword(email.value, senha.value)
-                .then((res) => {
+                .then(() => {
                     setLoading(false);
                     setTimeout(() => {
                         history.push('/');

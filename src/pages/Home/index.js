@@ -1,9 +1,7 @@
 import React from 'react';
 import {
     AppBar,
-    Button,
     Drawer,
-    Divider,
     List,
     ListItem,
     ListItemIcon,
@@ -21,7 +19,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import { useStyles } from "./styles";
 import app from "../../base";
 
-export default function Home({props}) {
+export default function Home() {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
@@ -49,7 +47,7 @@ export default function Home({props}) {
         setState({ ...state, [side]: open });
     };
 
-    const sideList = side => (
+    const drawerList = side => (
         <div
             className={classes.list}
             role="presentation"
@@ -71,7 +69,7 @@ export default function Home({props}) {
         <>
             <div className={classes.root}>
                 <Drawer open={state.left} onClose={toggleDrawer('left', false)}>
-                    {sideList('left')}
+                    {drawerList('left')}
                 </Drawer>
                 <AppBar position="static">
                     <Toolbar>
@@ -83,7 +81,7 @@ export default function Home({props}) {
                             <MenuIcon/>
                         </IconButton>
                         <Typography variant="h6" className={classes.title}>
-                            Home
+                            Lookup - Home
                         </Typography>
                         <div>
                             <IconButton
