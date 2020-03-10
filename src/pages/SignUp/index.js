@@ -37,13 +37,12 @@ function SignUp({history}) {
                     history.push("/");
                 })
                 .catch((error) => {
-                    switch (error.code) {
-                        case 'auth/email-already-in-use':
-                            setErrorDuplicatedEmail(true);
+                    if (error.code === 'auth/email-already-in-use') {
+                        setErrorDuplicatedEmail(true);
                     }
                 });
         }
-    }, [history]);
+    }, [errorWeekPassword, history]);
 
     useEffect(() => {
         if (!email) {
@@ -56,7 +55,7 @@ function SignUp({history}) {
         if (errorDuplicatedEmail) {
             setErrorDuplicatedEmail(false);
         }
-    }, [email]);
+    }, [email, errorDuplicatedEmail]);
 
     useEffect(() => {
         if (password) {

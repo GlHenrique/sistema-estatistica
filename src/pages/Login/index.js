@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import {
     Button,
     CssBaseline,
@@ -16,10 +16,11 @@ import {
     useStyles
 } from './styles';
 import app from "../../base";
-import { withRouter } from 'react-router';
+import { withRouter, Redirect } from 'react-router';
 import FormValidators from "../../utils/validators";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import logo from '../../assets/logos/lookup-density.png';
+import { AuthContext } from "../../auth/Auth";
 
 function Copyright() {
     return (
@@ -62,7 +63,7 @@ function Login({history}) {
                 .then(() => {
                     setLoading(false);
                     setTimeout(() => {
-                        history.push('/');
+                        history.push('/home');
                     }, 100);
                 })
                 .catch((error) => {
@@ -85,9 +86,15 @@ function Login({history}) {
         if (wrongPassword) {
             setWrongPassword(false);
         }
-    }, [password]);
+    }, [password, wrongPassword]);
 
-    // const currentUser = useContext(AuthContext);
+    const authContext = useContext(AuthContext);
+
+    if (authContext.currentUser) {
+        return (
+            <Redirect to="/home" />
+        )
+    }
 
 
     return (

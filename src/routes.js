@@ -13,7 +13,8 @@ export default function Routes() {
         <AuthProvider>
             <BrowserRouter>
                 <Switch>
-                    <PrivateRoute exact path="/" component={Home}/>
+                    <PrivateRoute exact path="/home" component={Home}/>
+                    <Route exact path="/" render={Login} />
                     <Route exact path="/login" component={Login}/>
                     <Route exact path="/signup" component={SignUp}/>
                     <Route path="**" component={NotFound}/>

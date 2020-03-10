@@ -17,11 +17,12 @@ import {
     Grid, CardContent, CardActions
 } from '@material-ui/core';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import PowerSettingsNew from '@material-ui/icons/PowerSettingsNew'
 import { useStyles } from "./styles";
 import app from "../../base";
+import { Link } from 'react-router-dom';
 
 export default function Home() {
     const classes = useStyles();
@@ -36,19 +37,25 @@ export default function Home() {
         setAnchorEl(null);
     };
 
-    const [state, setState] = React.useState({
+    const [drawer, setDrawer] = React.useState({
         top: false,
         left: false,
         bottom: false,
         right: false,
     });
 
+    const menu = [
+        {name: 'Estatística Descritiva', path: '/estatistica-descritiva'},
+        {name: 'Probabilidade', path: '/probabilidade'},
+        {name: 'Correlação e Regressão', path: '/correlacao'},
+    ];
+
     const toggleDrawer = (side, open) => event => {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
             return;
         }
 
-        setState({...state, [side]: open});
+        setDrawer({...drawer, [side]: open});
     };
 
     const drawerList = side => (
@@ -59,11 +66,15 @@ export default function Home() {
             onKeyDown={toggleDrawer(side, false)}
         >
             <List>
-                {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                    <ListItem button key={text}>
-                        <ListItemIcon>{index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}</ListItemIcon>
-                        <ListItemText primary={text}/>
-                    </ListItem>
+                {menu.map(item => (
+                    <Link key={item.path} to={item.path}>
+                        <ListItem button>
+                            <ListItemIcon>
+                                <InboxIcon/>
+                            </ListItemIcon>
+                            <ListItemText primary={item.name}/>
+                        </ListItem>
+                    </Link>
                 ))}
             </List>
         </div>
@@ -72,7 +83,7 @@ export default function Home() {
     return (
         <>
             <div className={classes.root}>
-                <Drawer open={state.left} onClose={toggleDrawer('left', false)}>
+                <Drawer open={drawer.left} onClose={toggleDrawer('left', false)}>
                     {drawerList('left')}
                 </Drawer>
                 <AppBar position="static">
@@ -112,7 +123,10 @@ export default function Home() {
                                 open={open}
                                 onClose={handleClose}
                             >
-                                <MenuItem onClick={() => app.auth().signOut()}>Logout</MenuItem>
+                                <MenuItem onClick={() => app.auth().signOut()}>
+                                    <PowerSettingsNew color="error"/>
+                                    Logout
+                                </MenuItem>
                             </Menu>
                         </div>
                     </Toolbar>
