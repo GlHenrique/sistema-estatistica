@@ -1,4 +1,5 @@
 import { makeStyles } from "@material-ui/core/styles";
+import styled from "styled-components";
 
 export const useStyles = makeStyles(theme => ({
     root: {
@@ -11,15 +12,17 @@ export const useStyles = makeStyles(theme => ({
         flexGrow: 1,
     },
     list: {
-        width: 250
+        width: 250,
     },
-    fullList: {
-        width: 'auto'
+    link: {
+        textDecoration: 'none',
+        color: 'inherit'
     },
-    card: {
-        maxWidth: 400
-    },
-    cardMedia: {
-        height: 140
+    cardWidth: {
+        maxWidth: 430
     }
 }));
+
+export const Background = styled.img`
+width: 100%;
+`;

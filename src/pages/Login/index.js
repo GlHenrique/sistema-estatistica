@@ -32,7 +32,7 @@ function Copyright() {
 
 
 function Login({history}) {
-
+    const authContext = useContext(AuthContext);
     const classes = useStyles();
 
     const [email, setEmail] = useState('');
@@ -88,11 +88,9 @@ function Login({history}) {
         }
     }, [password, wrongPassword]);
 
-    const authContext = useContext(AuthContext);
-
     if (authContext.currentUser) {
         return (
-            <Redirect to="/home" />
+            <Redirect to="/home"/>
         )
     }
 
@@ -103,7 +101,7 @@ function Login({history}) {
             <Grid item xs={false} sm={4} md={7} className={classes.image}/>
             <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
                 <div className={classes.paper}>
-                    <img alt="Lookup" src={logo} />
+                    <img alt="Lookup" src={logo}/>
                     <form className={classes.form} onSubmit={handleLogin}>
                         <TextField
                             variant="outlined"
@@ -135,7 +133,7 @@ function Login({history}) {
                                 endAdornment: (
                                     <InputAdornment position="end">
                                         <IconButton tabIndex={-1}
-                                            onClick={() => setIsPassword(!isPassword)}
+                                                    onClick={() => setIsPassword(!isPassword)}
                                         >
                                             {isPassword ? <Visibility/> : <VisibilityOff/>}
                                         </IconButton>

@@ -13,16 +13,24 @@ import {
     Menu,
     Card,
     CardActionArea,
+    CardMedia,
     Button,
-    Grid, CardContent, CardActions
+    Grid, CardContent, CardActions, Paper, GridList
 } from '@material-ui/core';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import PowerSettingsNew from '@material-ui/icons/PowerSettingsNew'
-import { useStyles } from "./styles";
+import {
+    useStyles,
+    Background
+} from "./styles";
 import app from "../../base";
 import { Link } from 'react-router-dom';
+import { IoMdAnalytics } from "react-icons/io";
+import background from '../../assets/images/lightPurpleHeader.svg';
+import mindMap from '../../assets/images/mapa_mental.png';
+import CardTitle from "../../components/CardTitle";
 
 export default function Home() {
     const classes = useStyles();
@@ -45,9 +53,9 @@ export default function Home() {
     });
 
     const menu = [
-        {name: 'Estatística Descritiva', path: '/estatistica-descritiva'},
-        {name: 'Probabilidade', path: '/probabilidade'},
-        {name: 'Correlação e Regressão', path: '/correlacao'},
+        {name: 'Estatística Descritiva', path: '/discriptive-statistics', icon: 'InboxIcon'},
+        {name: 'Probabilidade', path: '/probabilidade', icon: 'InboxIcon'},
+        {name: 'Correlação e Regressão', path: '/correlacao', icon: 'InboxIcon'},
     ];
 
     const toggleDrawer = (side, open) => event => {
@@ -67,10 +75,12 @@ export default function Home() {
         >
             <List>
                 {menu.map(item => (
-                    <Link key={item.path} to={item.path}>
+                    <Link
+                        className={classes.link}
+                        key={item.path} to={item.path}>
                         <ListItem button>
                             <ListItemIcon>
-                                <InboxIcon/>
+                                <IoMdAnalytics />
                             </ListItemIcon>
                             <ListItemText primary={item.name}/>
                         </ListItem>
@@ -96,7 +106,7 @@ export default function Home() {
                             <MenuIcon/>
                         </IconButton>
                         <Typography variant="h6" className={classes.title}>
-                            Lookup - Home
+                            Lookup
                         </Typography>
                         <div>
                             <IconButton
@@ -125,37 +135,26 @@ export default function Home() {
                             >
                                 <MenuItem onClick={() => app.auth().signOut()}>
                                     <PowerSettingsNew color="error"/>
-                                    Logout
                                 </MenuItem>
                             </Menu>
                         </div>
                     </Toolbar>
                 </AppBar>
-                <Grid container>
-                    <Card className={classes.card}>
-                        <CardActionArea
-                            className={classes.media}
-                            image="https://source.unsplash.com/random"
-                            title="Estatística Descritiva"
-                        >
-                            <CardContent>
-                                <Typography gutterBottom variant="h5" component="h2">
-                                    Lizard
-                                </Typography>
-                                <Typography variant="body2" color="textSecondary" component="p">
-                                    Lizards are ....
-                                </Typography>
-                            </CardContent>
-                        </CardActionArea>
-                        <CardActions>
-                            <Button size="small" color="primary">
-                                Share
-                            </Button>
-                            <Button size="small" color="primary">
-                                Learn More
-                            </Button>
-                        </CardActions>
-                    </Card>
+                <Grid container justify='center'>
+                    <Grid container>
+                        <Background src={background} />
+                    </Grid>
+                    <Grid container justify='center' spacing={2} style={{marginTop: '-23%', width: '100%'} }>
+                        <Grid item>
+                            <CardTitle title="Estatística Descritiva" />
+                        </Grid>
+                        <Grid item>
+                            <CardTitle title="Probabilidade" />
+                        </Grid>
+                        <Grid item>
+                            <CardTitle title="Correlação e Regressão" />
+                        </Grid>
+                    </Grid>
                 </Grid>
             </div>
         </>
