@@ -1,17 +1,18 @@
 import React, { useCallback, useEffect, useState } from "react";
 import {
-    Button,
+    Button, CircularProgress,
     CssBaseline,
     Grid,
     IconButton,
     InputAdornment,
     Paper,
     TextField,
-    Typography } from "@material-ui/core";
+    Typography
+} from "@material-ui/core";
 import app from "../../base";
 import { withRouter } from 'react-router';
 import { useStyles } from "../Login/styles";
-import { Visibility, VisibilityOff } from "@material-ui/icons";
+import { Visibility, VisibilityOff, ArrowBack } from "@material-ui/icons";
 import FormValidators from "../../utils/validators";
 
 function SignUp({history}) {
@@ -25,23 +26,27 @@ function SignUp({history}) {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [isPassword, setIsPassword] = useState(true);
     const [errorWeekPassword, setErrorWeekPassword] = useState(false);
+    const [errorPasswordDifferent, setErrorPasswordDifferent] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const handleSignUp = useCallback(async event => {
         event.preventDefault();
-        if (!errorWeekPassword) {
-            const {email, senha} = event.target.elements;
-            await app
-                .auth()
-                .createUserWithEmailAndPassword(email.value, senha.value)
-                .then(() => {
-                    history.push("/");
-                })
-                .catch((error) => {
-                    if (error.code === 'auth/email-already-in-use') {
-                        setErrorDuplicatedEmail(true);
-                    }
-                });
-        }
+        setLoading(true);
+        const {email, senha} = event.target.elements;
+        await app
+            .auth()
+            .createUserWithEmailAndPassword(email.value, senha.value)
+            .then(() => {
+                history.push("/");
+            })
+            .catch((error) => {
+                if (error.code === 'auth/email-already-in-use') {
+                    setErrorDuplicatedEmail(true);
+                }
+            }).finally(() => {
+                setLoading(false);
+            });
+
     }, [errorWeekPassword, history]);
 
     useEffect(() => {
@@ -67,16 +72,31 @@ function SignUp({history}) {
         }
     }, [password]);
 
+    useEffect(() => {
+        if (confirmPassword) {
+            if (confirmPassword !== password) {
+                setErrorPasswordDifferent(true);
+            } else {
+                setErrorPasswordDifferent(false);
+            }
+        }
+    }, [confirmPassword, errorPasswordDifferent, password]);
+
     return (
         <Grid container component="main" className={classes.root}>
             <CssBaseline/>
             <Grid item xs={false} sm={4} md={7} className={classes.image}/>
             <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+                <Grid container justify="flex-start">
+                    <IconButton>
+                        <ArrowBack/>
+                    </IconButton>
+                </Grid>
                 <div className={classes.paper}>
                     <Typography component="h1" variant="h5">
                         Cadastro
                     </Typography>
-                    <form className={classes.form} onSubmit={handleSignUp}>
+                    <form noValidate={false} className={classes.form} onSubmit={handleSignUp}>
                         <TextField
                             variant="outlined"
                             margin="normal"
@@ -99,7 +119,7 @@ function SignUp({history}) {
                             fullWidth
                             label="Senha"
                             name="senha"
-                            type="password"
+                            type={isPassword ? 'password' : 'text'}
                             error={errorWeekPassword}
                             helperText={errorWeekPassword ? 'A senha exige no mínimo 6 caracteres.' : null}
                             value={password}
@@ -107,8 +127,7 @@ function SignUp({history}) {
                             InputProps={{
                                 endAdornment: (
                                     <InputAdornment position="end">
-                                        <IconButton
-                                            onClick={() => setIsPassword(!isPassword)}
+                                        <IconButton tabIndex={-1} onClick={() => setIsPassword(!isPassword)}
                                         >
                                             {isPassword ? <Visibility/> : <VisibilityOff/>}
                                         </IconButton>
@@ -124,7 +143,8 @@ function SignUp({history}) {
                             label="Confirmar Senha"
                             name="confirmar-senha"
                             type="password"
-                            error={false}
+                            error={errorPasswordDifferent}
+                            helperText={errorPasswordDifferent ? 'As senhas devem ser iguais' : null}
                             value={confirmPassword}
                             onChange={event => setConfirmPassword(event.target.value)}
                         />
@@ -133,9 +153,11 @@ function SignUp({history}) {
                             fullWidth
                             variant="contained"
                             color="primary"
+                            disabled={errorPasswordDifferent || errorEmail || errorWeekPassword}
                             className={classes.submit} style={{height: '48px'}}
                         >
-                            Cadastrar
+                            {loading ? <CircularProgress style={{color: 'rgb(220, 0, 78)'}}/>
+                                : 'Entrar'}
                         </Button>
                     </form>
                 </div>

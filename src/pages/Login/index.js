@@ -134,7 +134,7 @@ function Login({history}) {
                             InputProps={{
                                 endAdornment: (
                                     <InputAdornment position="end">
-                                        <IconButton
+                                        <IconButton tabIndex={-1}
                                             onClick={() => setIsPassword(!isPassword)}
                                         >
                                             {isPassword ? <Visibility/> : <VisibilityOff/>}
