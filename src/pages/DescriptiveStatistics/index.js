@@ -1,9 +1,8 @@
 import React from 'react';
+import Header from "../../components/Header";
 
 export default function DescriptiveStatistics() {
     return (
-        <div>
-            Teste
-        </div>
+        <Header titleToolbar="Lookup - Estatística Descritiva"/>
     )
 }
