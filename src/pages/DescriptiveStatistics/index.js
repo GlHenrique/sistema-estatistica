@@ -17,13 +17,13 @@ import {
     Radio,
 } from '@material-ui/core';
 import {
-    useStyles,
-    AvaliationMethod
+    useStyles
 } from './styles';
 import GoBack from "../../components/GoBack";
 import { useState } from 'react';
 
 export default function DescriptiveStatistics() {
+    document.title = 'Estatística Descritiva';
 
     const classes = useStyles();
     const [variableName, setVariableName] = useState('');

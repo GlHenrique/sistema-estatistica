@@ -13,6 +13,7 @@ export function Layout({children, title}) {
 }
 
 export default function Home() {
+    document.title = 'Lookup | Home';
 
     return (
         <Layout title="Lookup">

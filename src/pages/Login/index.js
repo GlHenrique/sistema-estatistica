@@ -32,6 +32,8 @@ function Copyright() {
 
 
 function Login({history}) {
+    document.title = 'Lookup | Login';
+
     const authContext = useContext(AuthContext);
     const classes = useStyles();
 
