@@ -47,7 +47,7 @@ function SignUp({history}) {
                 setLoading(false);
             });
 
-    }, [errorWeekPassword, history]);
+    }, [history]);
 
     useEffect(() => {
         if (!email) {

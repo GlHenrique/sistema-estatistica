@@ -3,7 +3,7 @@ import { Grid } from '@material-ui/core';
 import CardTitle from "../../components/CardTitle";
 import Header from "../../components/Header";
 
-function Layout({children, title}) {
+export function Layout({children, title}) {
     return (
         <>
             <Header titleToolbar={title}/>

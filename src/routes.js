@@ -7,6 +7,8 @@ import SignUp from "./pages/SignUp";
 import { AuthProvider } from "./auth/Auth";
 import PrivateRoute from "./auth/PrivateRoute";
 import DescriptiveStatistics from "./pages/DescriptiveStatistics";
+import Probability from "./pages/Probability";
+import CorrelationRegression from "./pages/CorrelationRegression";
 
 
 export default function Routes() {
@@ -16,6 +18,8 @@ export default function Routes() {
                 <Switch>
                     <PrivateRoute exact path="/home" component={Home} />
                     <PrivateRoute exact path="/discriptive-statistics" component={DescriptiveStatistics} />
+                    <PrivateRoute exact path="/probability" component={Probability} />
+                    <PrivateRoute exact path="/correlation-regression" component={CorrelationRegression} />
                     <Route exact path="/" render={Login} />
                     <Route exact path="/login" component={Login}/>
                     <Route exact path="/signup" component={SignUp}/>

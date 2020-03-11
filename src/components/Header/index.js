@@ -43,8 +43,8 @@ export default function Header(props) {
 
     const menu = [
         {name: 'Estatística Descritiva', path: '/discriptive-statistics', icon: 'InboxIcon'},
-        {name: 'Probabilidade', path: '/probabilidade', icon: 'InboxIcon'},
-        {name: 'Correlação e Regressão', path: '/correlacao', icon: 'InboxIcon'},
+        {name: 'Probabilidade', path: '/probability', icon: 'InboxIcon'},
+        {name: 'Correlação e Regressão', path: '/correlation-regression', icon: 'InboxIcon'},
     ];
 
     const toggleDrawer = (side, open) => event => {
