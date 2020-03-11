@@ -37,9 +37,9 @@ export default function DescriptiveStatistics() {
         <>
             <Header titleToolbar="Lookup - Estatística Descritiva"/>
             <Grid container justify="center" alignItems="center" style={{marginTop: '-25%'}}>
-                <Grid item>
+                <Grid item className={classes.cardSize}>
                     <Paper elevation={3}>
-                        <Card className={classes.root}>
+                        <Card>
                             <CardContent>
                                 <Box display="flex" alignItems="center">
                                     <GoBack/>
@@ -51,8 +51,7 @@ export default function DescriptiveStatistics() {
                                     <Typography
                                         variant="body2"
                                         color="textSecondary"
-                                        component="p"
-                                        style={{width: '100%'}}>
+                                        component="p">
                                         Insira abaixo o nome da variável que deseja analisar.
                                     </Typography>
                                 </Box>
