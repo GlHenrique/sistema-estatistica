@@ -12,6 +12,7 @@ import {
     Typography
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
+import ArrowBack from '@material-ui/icons/ArrowBack';
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import app from "../../base";
 import PowerSettingsNew from "@material-ui/icons/PowerSettingsNew";
@@ -19,10 +20,12 @@ import { Background, useStyles } from "../../pages/Home/styles";
 import background from "../../assets/images/lightPurpleHeader.svg";
 import { Link } from "react-router-dom";
 import { IoMdAnalytics } from "react-icons/io";
+import { useHistory } from 'react-router-dom';
 
 export default function Header(props) {
 
     const classes = useStyles();
+    const location = useHistory();
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
 
@@ -42,6 +45,7 @@ export default function Header(props) {
     });
 
     const menu = [
+        {name: 'Home', path: '/home', icon: 'home'},
         {name: 'Estatística Descritiva', path: '/discriptive-statistics', icon: 'InboxIcon'},
         {name: 'Probabilidade', path: '/probability', icon: 'InboxIcon'},
         {name: 'Correlação e Regressão', path: '/correlation-regression', icon: 'InboxIcon'},
@@ -63,6 +67,9 @@ export default function Header(props) {
             onKeyDown={toggleDrawer(side, false)}
         >
             <List>
+                <IconButton onClick={() => location.goBack()} style={{margin: '10px'}} color={"secondary"}>
+                    <ArrowBack />
+                </IconButton>
                 {menu.map(item => (
                     <Link
                         className={classes.link}
