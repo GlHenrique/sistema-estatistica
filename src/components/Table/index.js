@@ -28,7 +28,7 @@ const rows = [
 
 
 
-export default function TableComponent() {
+export default function TableComponent(props) {
     const classes = useStyles();
 
     return (
@@ -36,11 +36,11 @@ export default function TableComponent() {
             <Table className={classes.table} aria-label="customized table">
                 <TableHead>
                     <TableRow>
-                        <StyledTableCell>Dessert (100g serving)</StyledTableCell>
-                        <StyledTableCell align="right">Calories</StyledTableCell>
-                        <StyledTableCell align="right">Fat&nbsp;(g)</StyledTableCell>
-                        <StyledTableCell align="right">Carbs&nbsp;(g)</StyledTableCell>
-                        <StyledTableCell align="right">Protein&nbsp;(g)</StyledTableCell>
+                        <StyledTableCell>{props.variableName}</StyledTableCell>
+                        <StyledTableCell align="right">Frequência simples</StyledTableCell>
+                        <StyledTableCell align="right">Frequência relativa</StyledTableCell>
+                        <StyledTableCell align="right">Frequência acumulada</StyledTableCell>
+                        <StyledTableCell align="right">Frequência acumulada percentual</StyledTableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>

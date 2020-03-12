@@ -14,7 +14,7 @@ import {
     FormControlLabel,
     FormLabel,
     RadioGroup,
-    Radio,
+    Radio, CircularProgress,
 } from '@material-ui/core';
 import {
     useStyles
@@ -30,9 +30,19 @@ export default function DescriptiveStatistics() {
     const [variableName, setVariableName] = useState('');
     const [method, setMethod] = useState('populacao');
     const [values, setValues] = useState('');
+    const [calculating, setCalculating] = useState(false);
+    const [showTable, setShowTable] = useState(false);
 
     const handleMethod = method => event => {
         setMethod(event.target.value)
+    };
+
+    const handleCalculate = () => {
+        setCalculating(true);
+        setTimeout(() => {
+            setCalculating(false);
+            setShowTable(true);
+        }, 3000)
     };
 
     useEffect(() => {
@@ -100,13 +110,13 @@ export default function DescriptiveStatistics() {
                                         value={values}
                                         inputProps={{spellCheck: false}}
                                         onChange={event => setValues(event.target.value)}
-                                        placeholder={'Insira os valores separados por ponto e vírgula (;)'}
+                                        placeholder="Insira os valores separados por ponto e vírgula (;)"
                                     />
                                 </Box>
                                 <CardActions className={classes.cardActions}>
                                     <Grid container justify="flex-end">
-                                        <Button variant="contained" size="large" color="primary">
-                                            Calcular
+                                        <Button onClick={(event) => handleCalculate(event)} variant="contained" size="large" color="primary">
+                                            {calculating ? <CircularProgress size={40} style={{color: 'rgb(220, 0, 78)'}} /> : 'Calcular'}
                                         </Button>
                                     </Grid>
                                 </CardActions>
@@ -115,9 +125,13 @@ export default function DescriptiveStatistics() {
                     </Paper>
                 </Grid>
             </Grid>
-            <Box style={{padding: 56}}>
-                <TableComponent/>
-            </Box>
+            {showTable ? (
+                <Box style={{padding: 56}}>
+                    <TableComponent
+                        variableName={variableName}
+                    />
+                </Box>
+            ) : null}
         </>
     )
 }
