@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Header from "../../components/Header";
 import {
     Paper,
@@ -21,6 +21,7 @@ import {
 } from './styles';
 import GoBack from "../../components/GoBack";
 import { useState } from 'react';
+import TableComponent from "../../components/Table";
 
 export default function DescriptiveStatistics() {
     document.title = 'Estatística Descritiva';
@@ -28,10 +29,15 @@ export default function DescriptiveStatistics() {
     const classes = useStyles();
     const [variableName, setVariableName] = useState('');
     const [method, setMethod] = useState('populacao');
+    const [values, setValues] = useState('');
 
     const handleMethod = method => event => {
         setMethod(event.target.value)
     };
+
+    useEffect(() => {
+        console.log(values);
+    }, [values])
 
     return (
         <>
@@ -47,17 +53,14 @@ export default function DescriptiveStatistics() {
                                         Descritiva
                                     </Typography>
                                 </Box>
-                                <Box>
-                                    <Typography
-                                        variant="body2"
-                                        color="textSecondary"
-                                        component="p">
-                                        Insira abaixo o nome da variável que deseja analisar.
-                                    </Typography>
-                                </Box>
+                                <Typography
+                                    variant="body2"
+                                    color="textSecondary"
+                                    component="p">
+                                    Insira abaixo o nome da variável que deseja analisar.
+                                </Typography>
                                 <TextField
                                     required
-                                    id="outlined-required"
                                     label="Nome da variável"
                                     variant="outlined"
                                     margin="normal"
@@ -80,19 +83,41 @@ export default function DescriptiveStatistics() {
                                         />
                                     </RadioGroup>
                                 </FormControl>
+                                <Typography
+                                    variant="body2"
+                                    color="textSecondary"
+                                    component="p">
+                                    Inserção manual de valores:
+                                </Typography>
+                                <Box className={classes.formControl}>
+                                    <TextField
+                                        label="Elementos"
+                                        multiline
+                                        rows="4"
+                                        variant="outlined"
+                                        required
+                                        fullWidth
+                                        value={values}
+                                        inputProps={{spellCheck: false}}
+                                        onChange={event => setValues(event.target.value)}
+                                        placeholder={'Insira os valores separados por ponto e vírgula (;)'}
+                                    />
+                                </Box>
+                                <CardActions className={classes.cardActions}>
+                                    <Grid container justify="flex-end">
+                                        <Button variant="contained" size="large" color="primary">
+                                            Calcular
+                                        </Button>
+                                    </Grid>
+                                </CardActions>
                             </CardContent>
-                            <CardActions>
-                                <Button size="small" color="primary">
-                                    Share
-                                </Button>
-                                <Button size="small" color="primary">
-                                    Learn More
-                                </Button>
-                            </CardActions>
                         </Card>
                     </Paper>
                 </Grid>
             </Grid>
+            <Box style={{padding: 56}}>
+                <TableComponent/>
+            </Box>
         </>
     )
 }
