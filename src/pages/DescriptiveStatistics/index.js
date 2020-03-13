@@ -32,6 +32,7 @@ export default function DescriptiveStatistics() {
     const [values, setValues] = useState('');
     const [calculating, setCalculating] = useState(false);
     const [showTable, setShowTable] = useState(false);
+    const [formattedValues, setFormattedValues] = useState([]);
 
     const handleMethod = method => event => {
         setMethod(event.target.value)
@@ -43,26 +44,32 @@ export default function DescriptiveStatistics() {
             setCalculating(false);
             setShowTable(true);
         }, 3000)
+        let arrayFormatted = values.split(';');
+        arrayFormatted = arrayFormatted.map(item => {
+            return Number(item); // Convertendo para Number
+        });
+        arrayFormatted.sort(
+            (comparingA, comparingB) => {
+                 return comparingA -comparingB;
+                }
+            ); // Organizando do menor para o maior
+        setFormattedValues(arrayFormatted);
     };
-
-    useEffect(() => {
-        console.log(values);
-    }, [values])
 
     return (
         <>
-            <Header titleToolbar="Lookup - Estatística Descritiva"/>
-            <Grid container justify="center" alignItems="center" style={{marginTop: '-25%'}}>
+            <Header titleToolbar="Lookup - Estatística Descritiva" />
+            <Grid container justify="center" alignItems="center" style={{ marginTop: '-25%' }}>
                 <Grid item className={classes.cardSize}>
                     <Paper elevation={3}>
                         <Card>
-                            <CardContent>
-                                <Box display="flex" alignItems="center">
-                                    <GoBack/>
-                                    <Typography variant="h5" component="h2">
-                                        Descritiva
+                            <Box display="flex" alignItems="center">
+                                <GoBack />
+                                <Typography variant="h5" component="h2">
+                                    Descritiva
                                     </Typography>
-                                </Box>
+                            </Box>
+                            <CardContent>
                                 <Typography
                                     variant="body2"
                                     color="textSecondary"
@@ -83,12 +90,12 @@ export default function DescriptiveStatistics() {
                                     <RadioGroup name="Method" value={method} onChange={handleMethod('populacao')}>
                                         <FormControlLabel
                                             value="populacao"
-                                            control={<Radio/>}
+                                            control={<Radio />}
                                             label="População"
                                         />
                                         <FormControlLabel
                                             value="amostra"
-                                            control={<Radio/>}
+                                            control={<Radio />}
                                             label="Amostra"
                                         />
                                     </RadioGroup>
@@ -108,7 +115,7 @@ export default function DescriptiveStatistics() {
                                         required
                                         fullWidth
                                         value={values}
-                                        inputProps={{spellCheck: false}}
+                                        inputProps={{ spellCheck: false }}
                                         onChange={event => setValues(event.target.value)}
                                         placeholder="Insira os valores separados por ponto e vírgula (;)"
                                     />
@@ -116,7 +123,7 @@ export default function DescriptiveStatistics() {
                                 <CardActions className={classes.cardActions}>
                                     <Grid container justify="flex-end">
                                         <Button onClick={(event) => handleCalculate(event)} variant="contained" size="large" color="primary">
-                                            {calculating ? <CircularProgress size={40} style={{color: 'rgb(220, 0, 78)'}} /> : 'Calcular'}
+                                            {calculating ? <CircularProgress size={20} style={{ color: 'rgb(220, 0, 78)' }} /> : 'Calcular'}
                                         </Button>
                                     </Grid>
                                 </CardActions>
@@ -126,9 +133,10 @@ export default function DescriptiveStatistics() {
                 </Grid>
             </Grid>
             {showTable ? (
-                <Box style={{padding: 56}}>
+                <Box style={{ padding: 56 }}>
                     <TableComponent
                         variableName={variableName}
+                        variableValues={formattedValues}
                     />
                 </Box>
             ) : null}
