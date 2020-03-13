@@ -14,8 +14,6 @@ import {
     useStyles,
 } from './styles';
 
-
-
 export default function TableComponent(props) {
 
     const { variableValues } = props;
@@ -44,10 +42,22 @@ export default function TableComponent(props) {
         // createData('Gingerbread', 356, 16.0, 49, 3.9),
     ];
 
-    for (let i of variableValues) {
-        rows.push(createData([i]))
-    }
 
+    const simpleFrequency = variableValues.reduce((age, count) => {
+        if (!age[count]) {
+            age[count] = 1;
+        } else {
+            age[count]++;
+        }
+        return age;
+        
+    }, {})
+
+    const tableRow = Object.getOwnPropertyNames(simpleFrequency);
+
+    for (let i of tableRow) {
+        rows.push(createData([i], simpleFrequency[i]))
+    }
 
     return (
         <TableContainer component={Paper}>
@@ -62,8 +72,8 @@ export default function TableComponent(props) {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rows.map(row => (
-                        <StyledTableRow key={row.variableName}>
+                    {rows.map((row, index) => (
+                        <StyledTableRow key={index}>
                             <StyledTableCell component="th" scope="row">
                                 {row.variableName}
                             </StyledTableCell>

@@ -43,17 +43,18 @@ export default function DescriptiveStatistics() {
         setTimeout(() => {
             setCalculating(false);
             setShowTable(true);
-        }, 3000)
-        let arrayFormatted = values.split(';');
-        arrayFormatted = arrayFormatted.map(item => {
-            return Number(item); // Convertendo para Number
-        });
-        arrayFormatted.sort(
-            (comparingA, comparingB) => {
-                 return comparingA -comparingB;
+            let arrayFormatted = values.split(';');
+            arrayFormatted = arrayFormatted.map(item => {
+                return Number(item); // Convertendo para Number
+            });
+            arrayFormatted.sort(
+                (comparingA, comparingB) => {
+                    return comparingA - comparingB;
                 }
             ); // Organizando do menor para o maior
-        setFormattedValues(arrayFormatted);
+            setFormattedValues(arrayFormatted);
+            setValues('');
+        });
     };
 
     return (
