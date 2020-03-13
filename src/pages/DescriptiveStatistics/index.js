@@ -29,7 +29,7 @@ export default function DescriptiveStatistics() {
     const classes = useStyles();
     const [variableName, setVariableName] = useState('');
     const [method, setMethod] = useState('populacao');
-    const [values, setValues] = useState('');
+    const [values, setValues] = useState('56;14;78;99;63;100;42;36;36;36;36');
     const [calculating, setCalculating] = useState(false);
     const [showTable, setShowTable] = useState(false);
     const [formattedValues, setFormattedValues] = useState([]);
@@ -138,6 +138,7 @@ export default function DescriptiveStatistics() {
                     <TableComponent
                         variableName={variableName}
                         variableValues={formattedValues}
+                        total={formattedValues.length}
                     />
                 </Box>
             ) : null}

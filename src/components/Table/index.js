@@ -50,10 +50,24 @@ export default function TableComponent(props) {
             age[count]++;
         }
         return age;
-        
+
     }, {})
 
     const tableRow = Object.getOwnPropertyNames(simpleFrequency);
+
+    const simpleFrequencyValues = Object.values(simpleFrequency);
+
+    // let relativeFrequency = simpleFrequencyValues[i];
+    // console.log(relativeFrequency);
+
+
+
+    // console.log(simpleFrequency)
+
+    for (let i in simpleFrequency) {
+        console.log(i); // Para calcular Frequencia Relativa: FreSimples / Total
+    }
+
 
     for (let i of tableRow) {
         rows.push(createData([i], simpleFrequency[i]))
@@ -83,6 +97,15 @@ export default function TableComponent(props) {
                             <StyledTableCell align="right">{row.accumulatedPercentageFrequency}</StyledTableCell>
                         </StyledTableRow>
                     ))}
+                    <StyledTableRow>
+                        <StyledTableCell component="th" scope="row">
+                            Total: {props.total}
+                        </StyledTableCell>
+                        <StyledTableCell align="right"></StyledTableCell>
+                        <StyledTableCell align="right"></StyledTableCell>
+                        <StyledTableCell align="right"></StyledTableCell>
+                        <StyledTableCell align="right"></StyledTableCell>
+                    </StyledTableRow>
                 </TableBody>
             </Table>
         </TableContainer>
