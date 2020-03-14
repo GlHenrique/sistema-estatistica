@@ -56,6 +56,7 @@ export default function TableComponent(props) {
     const tableRow = Object.getOwnPropertyNames(simpleFrequency);
 
     let simpleFrequencyValues = Object.values(simpleFrequency);
+    let accumulatedFrequence = simpleFrequencyValues;
 
     // let relativeFrequency = simpleFrequencyValues[i];
     // console.log(relativeFrequency);
@@ -100,6 +101,26 @@ export default function TableComponent(props) {
         rows[i].relativeFrequency = simpleFrequencyValues[i];
     }
 
+    // const reducer = (accumulator, currentValue) => accumulator + currentValue;
+    // console.log(simpleFrequencyValues.reduce(reducer));
+    function accumulate(vet) {
+        for (let i = 0; i < vet.length; i++) {
+            if (i > 0) {
+                vet[i] += vet[i -1];
+            }
+        }
+        return vet;
+    }
+
+    accumulatedFrequence = accumulate(accumulatedFrequence);
+    let accumulatedPercentageFrequency = accumulate(simpleFrequencyValues);
+
+    console.log(rows)
+    for (let i = 0; i < rows.length; i++) {
+        rows[i].accumulatedFrequency = accumulatedFrequence[i];
+        rows[i].accumulatedPercentageFrequency = accumulatedPercentageFrequency[i];
+    }
+
 
     return (
         <TableContainer component={Paper}>
@@ -120,9 +141,9 @@ export default function TableComponent(props) {
                                 {row.variableName}
                             </StyledTableCell>
                             <StyledTableCell align="center">{row.simpleFrequency}</StyledTableCell>
-                            <StyledTableCell align="center">{row.relativeFrequency}</StyledTableCell>
+                            <StyledTableCell align="center">{row.relativeFrequency}%</StyledTableCell>
                             <StyledTableCell align="center">{row.accumulatedFrequency}</StyledTableCell>
-                            <StyledTableCell align="center">{row.accumulatedPercentageFrequency}</StyledTableCell>
+                            <StyledTableCell align="center">{row.accumulatedPercentageFrequency}%</StyledTableCell>
                         </StyledTableRow>
                     ))}
                     <StyledTableRow>
