@@ -80,16 +80,26 @@ export default function TableComponent(props) {
         if (floatItem >= 0.5) {
             return parseItem + 1;
         }
-        return parseItem // Frequencia simples
+        return parseItem // Frequencia relative
     });
+
+    // for (let i of simpleFrequencyValues) {
+    //     console.log(i)
+    // }
+    // console.log(tableRow)
 
     // TODO Show Relative Frequency, on table,
     // TODO and show accumulated frequency
+    // percorrer a frequencia relativa e no index dela receber o valor do index atual;
 
     for (let i of tableRow) {
-        console.log(i);
-        rows.push(createData([i], simpleFrequency[i], simpleFrequencyValues[i]))
+        rows.push(createData([i], simpleFrequency[i]))
     }
+
+    for (let i = 0; i < simpleFrequencyValues.length; i++) {
+        rows[i].relativeFrequency = simpleFrequencyValues[i];
+    }
+
 
     return (
         <TableContainer component={Paper}>
@@ -109,10 +119,10 @@ export default function TableComponent(props) {
                             <StyledTableCell component="th" scope="row">
                                 {row.variableName}
                             </StyledTableCell>
-                            <StyledTableCell align="right">{row.simpleFrequency}</StyledTableCell>
-                            <StyledTableCell align="right">{row.relativeFrequency}</StyledTableCell>
-                            <StyledTableCell align="right">{row.accumulatedFrequency}</StyledTableCell>
-                            <StyledTableCell align="right">{row.accumulatedPercentageFrequency}</StyledTableCell>
+                            <StyledTableCell align="center">{row.simpleFrequency}</StyledTableCell>
+                            <StyledTableCell align="center">{row.relativeFrequency}</StyledTableCell>
+                            <StyledTableCell align="center">{row.accumulatedFrequency}</StyledTableCell>
+                            <StyledTableCell align="center">{row.accumulatedPercentageFrequency}</StyledTableCell>
                         </StyledTableRow>
                     ))}
                     <StyledTableRow>

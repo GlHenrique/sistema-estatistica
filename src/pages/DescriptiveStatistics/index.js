@@ -136,7 +136,7 @@ export default function DescriptiveStatistics() {
                 </Grid>
                 <Grid item style={{maxWidth: '100%', margin: '32px'}}>
                     {showTable ? (
-                        <Box style={{margin: 32}}>
+                        <Box>
                             <TableComponent
                                 variableName={variableName}
                                 variableValues={formattedValues}
