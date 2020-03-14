@@ -59,16 +59,16 @@ export default function DescriptiveStatistics() {
 
     return (
         <>
-            <Header titleToolbar="Lookup - Estatística Descritiva" />
-            <Grid container justify="center" alignItems="center" style={{ marginTop: '-25%' }}>
+            <Header titleToolbar="Lookup - Estatística Descritiva"/>
+            <Grid container justify="center" alignItems="center" style={{position: 'absolute', top: 155}}>
                 <Grid item className={classes.cardSize}>
                     <Paper elevation={3}>
                         <Card>
                             <Box display="flex" alignItems="center">
-                                <GoBack />
+                                <GoBack/>
                                 <Typography variant="h5" component="h2">
                                     Descritiva
-                                    </Typography>
+                                </Typography>
                             </Box>
                             <CardContent>
                                 <Typography
@@ -91,12 +91,12 @@ export default function DescriptiveStatistics() {
                                     <RadioGroup name="Method" value={method} onChange={handleMethod('populacao')}>
                                         <FormControlLabel
                                             value="populacao"
-                                            control={<Radio />}
+                                            control={<Radio/>}
                                             label="População"
                                         />
                                         <FormControlLabel
                                             value="amostra"
-                                            control={<Radio />}
+                                            control={<Radio/>}
                                             label="Amostra"
                                         />
                                     </RadioGroup>
@@ -116,15 +116,17 @@ export default function DescriptiveStatistics() {
                                         required
                                         fullWidth
                                         value={values}
-                                        inputProps={{ spellCheck: false }}
+                                        inputProps={{spellCheck: false}}
                                         onChange={event => setValues(event.target.value)}
                                         placeholder="Insira os valores separados por ponto e vírgula (;)"
                                     />
                                 </Box>
                                 <CardActions className={classes.cardActions}>
                                     <Grid container justify="flex-end">
-                                        <Button onClick={(event) => handleCalculate(event)} variant="contained" size="large" color="primary">
-                                            {calculating ? <CircularProgress size={20} style={{ color: 'rgb(220, 0, 78)' }} /> : 'Calcular'}
+                                        <Button onClick={(event) => handleCalculate(event)} variant="contained"
+                                                size="large" color="primary">
+                                            {calculating ? <CircularProgress size={20}
+                                                                             style={{color: 'rgb(220, 0, 78)'}}/> : 'Calcular'}
                                         </Button>
                                     </Grid>
                                 </CardActions>
@@ -132,16 +134,18 @@ export default function DescriptiveStatistics() {
                         </Card>
                     </Paper>
                 </Grid>
+                <Grid item style={{maxWidth: '100%', margin: '32px'}}>
+                    {showTable ? (
+                        <Box style={{margin: 32}}>
+                            <TableComponent
+                                variableName={variableName}
+                                variableValues={formattedValues}
+                                total={formattedValues.length}
+                            />
+                        </Box>
+                    ) : null}
+                </Grid>
             </Grid>
-            {showTable ? (
-                <Box style={{ padding: 56 }}>
-                    <TableComponent
-                        variableName={variableName}
-                        variableValues={formattedValues}
-                        total={formattedValues.length}
-                    />
-                </Box>
-            ) : null}
         </>
     )
 }

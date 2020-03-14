@@ -16,7 +16,7 @@ import {
 
 export default function TableComponent(props) {
 
-    const { variableValues } = props;
+    const {variableValues} = props;
     const classes = useStyles();
 
     function createData(
@@ -55,22 +55,40 @@ export default function TableComponent(props) {
 
     const tableRow = Object.getOwnPropertyNames(simpleFrequency);
 
-    const simpleFrequencyValues = Object.values(simpleFrequency);
+    let simpleFrequencyValues = Object.values(simpleFrequency);
 
     // let relativeFrequency = simpleFrequencyValues[i];
     // console.log(relativeFrequency);
 
 
-
     // console.log(simpleFrequency)
 
     for (let i in simpleFrequency) {
-        console.log(i); // Para calcular Frequencia Relativa: FreSimples / Total
+        // console.log(i); // Para calcular Frequencia Relativa: FreSimples / Total
+        // console.log(simpleFrequencyValues[i])
     }
 
+    simpleFrequencyValues = simpleFrequencyValues.map(item => {
+        let result = Number(item / props.total * 100).toFixed(2);
+        return result
+    });
+
+    simpleFrequencyValues = simpleFrequencyValues.map(item => {
+        item = Number(item);
+        let parseItem = Math.trunc(item);
+        let floatItem = Number((item - parseItem).toFixed(2));
+        if (floatItem >= 0.5) {
+            return parseItem + 1;
+        }
+        return parseItem // Frequencia simples
+    });
+
+    // TODO Show Relative Frequency, on table,
+    // TODO and show accumulated frequency
 
     for (let i of tableRow) {
-        rows.push(createData([i], simpleFrequency[i]))
+        console.log(i);
+        rows.push(createData([i], simpleFrequency[i], simpleFrequencyValues[i]))
     }
 
     return (
@@ -101,10 +119,10 @@ export default function TableComponent(props) {
                         <StyledTableCell component="th" scope="row">
                             Total: {props.total}
                         </StyledTableCell>
-                        <StyledTableCell align="right"></StyledTableCell>
-                        <StyledTableCell align="right"></StyledTableCell>
-                        <StyledTableCell align="right"></StyledTableCell>
-                        <StyledTableCell align="right"></StyledTableCell>
+                        <StyledTableCell align="right"/>
+                        <StyledTableCell align="right"/>
+                        <StyledTableCell align="right"/>
+                        <StyledTableCell align="right"/>
                     </StyledTableRow>
                 </TableBody>
             </Table>
