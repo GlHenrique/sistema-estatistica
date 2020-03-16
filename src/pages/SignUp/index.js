@@ -12,10 +12,11 @@ import {
 import app from "../../base";
 import { withRouter } from 'react-router';
 import { useStyles } from "../Login/styles";
-import { Visibility, VisibilityOff, ArrowBack } from "@material-ui/icons";
+import { Visibility, VisibilityOff } from "@material-ui/icons";
 import FormValidators from "../../utils/validators";
+import GoBack from '../../components/GoBack';
 
-function SignUp({history}) {
+function SignUp({ history }) {
 
     const classes = useStyles();
 
@@ -32,7 +33,7 @@ function SignUp({history}) {
     const handleSignUp = useCallback(async event => {
         event.preventDefault();
         setLoading(true);
-        const {email, senha} = event.target.elements;
+        const { email, senha } = event.target.elements;
         await app
             .auth()
             .createUserWithEmailAndPassword(email.value, senha.value)
@@ -84,14 +85,10 @@ function SignUp({history}) {
 
     return (
         <Grid container component="main" className={classes.root}>
-            <CssBaseline/>
-            <Grid item xs={false} sm={4} md={7} className={classes.image}/>
+            <CssBaseline />
+            <Grid item xs={false} sm={4} md={7} className={classes.image} />
             <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-                <Grid container justify="flex-start">
-                    <IconButton>
-                        <ArrowBack/>
-                    </IconButton>
-                </Grid>
+                <GoBack />
                 <div className={classes.paper}>
                     <Typography component="h1" variant="h5">
                         Cadastro
@@ -129,7 +126,7 @@ function SignUp({history}) {
                                     <InputAdornment position="end">
                                         <IconButton tabIndex={-1} onClick={() => setIsPassword(!isPassword)}
                                         >
-                                            {isPassword ? <Visibility/> : <VisibilityOff/>}
+                                            {isPassword ? <Visibility /> : <VisibilityOff />}
                                         </IconButton>
                                     </InputAdornment>
                                 )
@@ -154,9 +151,9 @@ function SignUp({history}) {
                             variant="contained"
                             color="primary"
                             disabled={errorPasswordDifferent || errorEmail || errorWeekPassword}
-                            className={classes.submit} style={{height: '48px'}}
+                            className={classes.submit} style={{ height: '48px' }}
                         >
-                            {loading ? <CircularProgress style={{color: 'rgb(220, 0, 78)'}}/>
+                            {loading ? <CircularProgress style={{ color: 'rgb(220, 0, 78)' }} />
                                 : 'Entrar'}
                         </Button>
                     </form>
