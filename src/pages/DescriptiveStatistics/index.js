@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Header from "../../components/Header";
 import {
     Paper,
@@ -33,16 +33,18 @@ export default function DescriptiveStatistics() {
     const [calculating, setCalculating] = useState(false);
     const [showTable, setShowTable] = useState(false);
     const [formattedValues, setFormattedValues] = useState([]);
+    const [variablePropName, setVariablePropName] = useState('');
 
     const handleMethod = method => event => {
         setMethod(event.target.value)
     };
 
-    const handleCalculate = () => {
+    const handleCalculate = (event) => {
+        event.preventDefault();
+        setVariablePropName(variableName);
         setCalculating(true);
         setTimeout(() => {
             setCalculating(false);
-            setShowTable(true);
             let arrayFormatted = values.split(';');
             arrayFormatted = arrayFormatted.map(item => {
                 return Number(item); // Convertendo para Number
@@ -53,98 +55,108 @@ export default function DescriptiveStatistics() {
                 }
             ); // Organizando do menor para o maior
             setFormattedValues(arrayFormatted);
+            setShowTable(true);
             setValues('');
-        });
+            setVariableName('');
+        }, 2000);
     };
 
     return (
         <>
-            <Header titleToolbar="Lookup - Estatística Descritiva"/>
-            <Grid container justify="center" alignItems="center" style={{position: 'absolute', top: 155}}>
+            <Header titleToolbar="Lookup - Estatística Descritiva" />
+            <Grid container justify="center" alignItems="center" style={{ position: 'absolute', top: 155 }}>
                 <Grid item className={classes.cardSize}>
                     <Paper elevation={3}>
                         <Card>
                             <Box display="flex" alignItems="center">
-                                <GoBack/>
+                                <GoBack />
                                 <Typography variant="h5" component="h2">
                                     Descritiva
                                 </Typography>
                             </Box>
                             <CardContent>
-                                <Typography
-                                    variant="body2"
-                                    color="textSecondary"
-                                    component="p">
-                                    Insira abaixo o nome da variável que deseja analisar.
-                                </Typography>
-                                <TextField
-                                    required
-                                    label="Nome da variável"
-                                    variant="outlined"
-                                    margin="normal"
-                                    value={variableName}
-                                    onChange={event => setVariableName(event.target.value)}
-                                    fullWidth
-                                />
-                                <FormControl component="fieldset" className={classes.formControl}>
-                                    <FormLabel component="legend">Método de avaliação</FormLabel>
-                                    <RadioGroup name="Method" value={method} onChange={handleMethod('populacao')}>
-                                        <FormControlLabel
-                                            value="populacao"
-                                            control={<Radio/>}
-                                            label="População"
-                                        />
-                                        <FormControlLabel
-                                            value="amostra"
-                                            control={<Radio/>}
-                                            label="Amostra"
-                                        />
-                                    </RadioGroup>
-                                </FormControl>
-                                <Typography
-                                    variant="body2"
-                                    color="textSecondary"
-                                    component="p">
-                                    Inserção manual de valores:
-                                </Typography>
-                                <Box className={classes.formControl}>
+                                <form onSubmit={(event) => handleCalculate(event)}>
+                                    <Typography
+                                        variant="body2"
+                                        color="textSecondary"
+                                        component="p">
+                                        Insira abaixo o nome da variável que deseja analisar.
+                                    </Typography>
                                     <TextField
-                                        label="Elementos"
-                                        multiline
-                                        rows="4"
-                                        variant="outlined"
                                         required
+                                        label="Nome da variável"
+                                        variant="outlined"
+                                        margin="normal"
+                                        value={variableName}
+                                        onChange={event => setVariableName(event.target.value)}
                                         fullWidth
-                                        value={values}
-                                        inputProps={{spellCheck: false}}
-                                        onChange={event => setValues(event.target.value)}
-                                        placeholder="Insira os valores separados por ponto e vírgula (;)"
                                     />
-                                </Box>
-                                <CardActions className={classes.cardActions}>
-                                    <Grid container justify="flex-end">
-                                        <Button onClick={(event) => handleCalculate(event)} variant="contained"
-                                                size="large" color="primary">
-                                            {calculating ? <CircularProgress size={20}
-                                                                             style={{color: 'rgb(220, 0, 78)'}}/> : 'Calcular'}
-                                        </Button>
-                                    </Grid>
-                                </CardActions>
+                                    <FormControl component="fieldset" className={classes.formControl}>
+                                        <FormLabel component="legend">Método de avaliação</FormLabel>
+                                        <RadioGroup name="Method" value={method} onChange={handleMethod('populacao')}>
+                                            <FormControlLabel
+                                                value="populacao"
+                                                control={<Radio />}
+                                                label="População"
+                                            />
+                                            <FormControlLabel
+                                                value="amostra"
+                                                control={<Radio />}
+                                                label="Amostra"
+                                            />
+                                        </RadioGroup>
+                                    </FormControl>
+                                    <Typography
+                                        variant="body2"
+                                        color="textSecondary"
+                                        component="p">
+                                        Inserção manual de valores:
+                                    </Typography>
+                                    <Box className={classes.formControl}>
+                                        <TextField
+                                            label="Elementos"
+                                            multiline
+                                            rows="4"
+                                            variant="outlined"
+                                            required
+                                            fullWidth
+                                            value={values}
+                                            inputProps={{ spellCheck: false }}
+                                            onChange={event => setValues(event.target.value)}
+                                            placeholder="Insira os valores separados por ponto e vírgula (;)"
+                                        />
+                                    </Box>
+                                    <CardActions className={classes.cardActions}>
+                                        <Grid container justify="flex-end">
+                                            <Button
+                                                variant="contained"
+                                                size="large"
+                                                type="submit"
+                                                color="primary">
+                                                {calculating ?
+                                                    <CircularProgress
+                                                        size={20}
+                                                        style={{ color: 'rgb(220, 0, 78)' }} />
+                                                    : 'Calcular'}
+                                            </Button>
+                                        </Grid>
+                                    </CardActions>
+                                </form>
                             </CardContent>
                         </Card>
                     </Paper>
                 </Grid>
-                <Grid item style={{maxWidth: '100%', margin: '32px'}}>
-                    {showTable ? (
+                {showTable ? (
+                    <Grid item style={{ maxWidth: '100%', margin: '32px' }}>
                         <Box>
                             <TableComponent
-                                variableName={variableName}
+                                variableName={variablePropName}
                                 variableValues={formattedValues}
                                 total={formattedValues.length}
                             />
                         </Box>
-                    ) : null}
-                </Grid>
+                    </Grid>
+                ) : null}
             </Grid>
         </>
     )

@@ -6,18 +6,20 @@ import {
     TableRow,
     TableBody,
     Paper,
-
 } from "@material-ui/core";
 import {
     StyledTableCell,
     StyledTableRow,
     useStyles,
 } from './styles';
+import { accumulate } from '../../utils/accumulator';
 
 export default function TableComponent(props) {
 
-    const {variableValues} = props;
+    const { variableValues, variableName, total } = props;
     const classes = useStyles();
+
+    const rows = [];
 
     function createData(
         variableName,
@@ -34,15 +36,6 @@ export default function TableComponent(props) {
         };
     }
 
-    const rows = [
-        // createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-        // createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-        // createData('Eclair', 262, 16.0, 24, 6.0),
-        // createData('Cupcake', 305, 3.7, 67, 4.3),
-        // createData('Gingerbread', 356, 16.0, 49, 3.9),
-    ];
-
-
     const simpleFrequency = variableValues.reduce((age, count) => {
         if (!age[count]) {
             age[count] = 1;
@@ -58,19 +51,8 @@ export default function TableComponent(props) {
     let simpleFrequencyValues = Object.values(simpleFrequency);
     let accumulatedFrequence = simpleFrequencyValues;
 
-    // let relativeFrequency = simpleFrequencyValues[i];
-    // console.log(relativeFrequency);
-
-
-    // console.log(simpleFrequency)
-
-    for (let i in simpleFrequency) {
-        // console.log(i); // Para calcular Frequencia Relativa: FreSimples / Total
-        // console.log(simpleFrequencyValues[i])
-    }
-
     simpleFrequencyValues = simpleFrequencyValues.map(item => {
-        let result = Number(item / props.total * 100).toFixed(2);
+        let result = Number(item / total * 100).toFixed(2);
         return result
     });
 
@@ -81,17 +63,8 @@ export default function TableComponent(props) {
         if (floatItem >= 0.5) {
             return parseItem + 1;
         }
-        return parseItem // Frequencia relative
+        return parseItem // Relative Frequency
     });
-
-    // for (let i of simpleFrequencyValues) {
-    //     console.log(i)
-    // }
-    // console.log(tableRow)
-
-    // TODO Show Relative Frequency, on table,
-    // TODO and show accumulated frequency
-    // percorrer a frequencia relativa e no index dela receber o valor do index atual;
 
     for (let i of tableRow) {
         rows.push(createData([i], simpleFrequency[i]))
@@ -101,33 +74,20 @@ export default function TableComponent(props) {
         rows[i].relativeFrequency = simpleFrequencyValues[i];
     }
 
-    // const reducer = (accumulator, currentValue) => accumulator + currentValue;
-    // console.log(simpleFrequencyValues.reduce(reducer));
-    function accumulate(vet) {
-        for (let i = 0; i < vet.length; i++) {
-            if (i > 0) {
-                vet[i] += vet[i -1];
-            }
-        }
-        return vet;
-    }
-
     accumulatedFrequence = accumulate(accumulatedFrequence);
     let accumulatedPercentageFrequency = accumulate(simpleFrequencyValues);
 
-    console.log(rows)
     for (let i = 0; i < rows.length; i++) {
         rows[i].accumulatedFrequency = accumulatedFrequence[i];
         rows[i].accumulatedPercentageFrequency = accumulatedPercentageFrequency[i];
     }
-
 
     return (
         <TableContainer component={Paper}>
             <Table className={classes.table} aria-label="customized table">
                 <TableHead>
                     <TableRow>
-                        <StyledTableCell>{props.variableName}</StyledTableCell>
+                        <StyledTableCell>{variableName}</StyledTableCell>
                         <StyledTableCell align="right">Frequência simples</StyledTableCell>
                         <StyledTableCell align="right">Frequência relativa</StyledTableCell>
                         <StyledTableCell align="right">Frequência acumulada</StyledTableCell>
@@ -148,12 +108,12 @@ export default function TableComponent(props) {
                     ))}
                     <StyledTableRow>
                         <StyledTableCell component="th" scope="row">
-                            Total: {props.total}
+                            Total: {total}
                         </StyledTableCell>
-                        <StyledTableCell align="right"/>
-                        <StyledTableCell align="right"/>
-                        <StyledTableCell align="right"/>
-                        <StyledTableCell align="right"/>
+                        <StyledTableCell align="right" />
+                        <StyledTableCell align="right" />
+                        <StyledTableCell align="right" />
+                        <StyledTableCell align="right" />
                     </StyledTableRow>
                 </TableBody>
             </Table>

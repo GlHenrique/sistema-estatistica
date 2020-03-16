@@ -85,7 +85,7 @@ export default function Header(props) {
             <Drawer open={drawer.left} onClose={toggleDrawer('left', false)}>
                 {drawerList('left')}
             </Drawer>
-            <AppBar position="static">
+            <AppBar position="fixed">
                 <Toolbar>
                     <IconButton
                         edge="start"
