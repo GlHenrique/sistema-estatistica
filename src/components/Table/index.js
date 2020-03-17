@@ -82,7 +82,7 @@ export default function TableComponent(props) {
                         <StyledTableCell align="right">Frequência acumulada percentual</StyledTableCell>
                     </TableRow>
                 </TableHead>
-                <TableBody>
+                <TableBody>1
                     {rows.map((row, index) => (
                         <StyledTableRow key={index}>
                             <StyledTableCell component="th" scope="row">
