@@ -72,6 +72,9 @@ export default function TableComponent(props) {
     for (let i = 0; i < rows.length; i++) {
         rows[i].accumulatedFrequency = accumulatedFrequence[i];
         rows[i].accumulatedPercentageFrequency = accumulatedPercentageFrequency[i];
+        if (rows[i].accumulatedPercentageFrequency > 100) {
+            rows[i].accumulatedPercentageFrequency = 100;
+        }
     }
 
     return (
