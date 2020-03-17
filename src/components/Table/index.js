@@ -25,6 +25,8 @@ export default function TableComponent(props) {
         };
     }
 
+    console.log(variableValues);
+
     const simpleFrequency = variableValues.reduce((age, count) => {
         if (!age[count]) {
             age[count] = 1;
@@ -34,6 +36,8 @@ export default function TableComponent(props) {
         return age;
 
     }, {});
+
+    console.log(simpleFrequency);
 
     const tableRow = Object.getOwnPropertyNames(simpleFrequency);
 
@@ -82,7 +86,7 @@ export default function TableComponent(props) {
                         <StyledTableCell align="right">Frequência acumulada percentual</StyledTableCell>
                     </TableRow>
                 </TableHead>
-                <TableBody>1
+                <TableBody>
                     {rows.map((row, index) => (
                         <StyledTableRow key={index}>
                             <StyledTableCell component="th" scope="row">

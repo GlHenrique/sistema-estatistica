@@ -40,27 +40,33 @@ export default function DescriptiveStatistics() {
 
     const handleCalculate = (event) => {
         event.preventDefault();
-        if (!method || !analyze) {
-            return;
-        }
         setVariablePropName(variableName);
         setCalculating(true);
-        setTimeout(() => {
-            setCalculating(false);
-            let arrayFormatted = values.split(';');
-            arrayFormatted = arrayFormatted.map(item => {
-                return Number(item); // Convertendo para Number
-            });
-            arrayFormatted.sort(
-                (comparingA, comparingB) => {
-                    return comparingA - comparingB;
-                }
-            ); // Organizando do menor para o maior
+        let arrayFormatted = values.split(';');
+        if (analyze === 'discreteQuantitative') {
+            setTimeout(() => {
+                setCalculating(false);
+                arrayFormatted = arrayFormatted.map(item => {
+                    return Number(item); // Convertendo para Number
+                });
+                arrayFormatted.sort(
+                    (comparingA, comparingB) => {
+                        return comparingA - comparingB;
+                    }
+                ); // Organizando do menor para o maior
+                setFormattedValues(arrayFormatted);
+                setShowTable(true);
+                setValues('');
+                setVariableName('');
+            }, 2000);
+            return;
+        }
+        if (analyze === 'qualitative' && order === 'false') {
             setFormattedValues(arrayFormatted);
             setShowTable(true);
             setValues('');
             setVariableName('');
-        }, 2000);
+        }
     };
 
     useEffect(() => {
