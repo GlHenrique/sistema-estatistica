@@ -62,10 +62,13 @@ export default function DescriptiveStatistics() {
             return;
         }
         if (analyze === 'qualitative' && order === 'false') {
-            setFormattedValues(arrayFormatted);
-            setShowTable(true);
-            setValues('');
-            setVariableName('');
+            setTimeout(() => {
+                setCalculating(false);
+                setFormattedValues(arrayFormatted);
+                setShowTable(true);
+                setValues('');
+                setVariableName('');
+            }, 2000);
         }
     };
 
