@@ -59,6 +59,7 @@ export default function DescriptiveStatistics() {
             setValues('');
             setVariableName('');
         }, 2000);
+        console.log(`Arroz com batata`);
     };
 
     return (
