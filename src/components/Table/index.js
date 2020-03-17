@@ -1,17 +1,6 @@
 import React from 'react';
-import {
-    TableContainer,
-    Table,
-    TableHead,
-    TableRow,
-    TableBody,
-    Paper,
-} from "@material-ui/core";
-import {
-    StyledTableCell,
-    StyledTableRow,
-    useStyles,
-} from './styles';
+import { Paper, Table, TableBody, TableContainer, TableHead, TableRow, } from "@material-ui/core";
+import { StyledTableCell, StyledTableRow, useStyles, } from './styles';
 import { accumulate } from '../../utils/accumulator';
 
 export default function TableComponent(props) {
@@ -44,7 +33,7 @@ export default function TableComponent(props) {
         }
         return age;
 
-    }, {})
+    }, {});
 
     const tableRow = Object.getOwnPropertyNames(simpleFrequency);
 
@@ -52,8 +41,7 @@ export default function TableComponent(props) {
     let accumulatedFrequence = simpleFrequencyValues;
 
     simpleFrequencyValues = simpleFrequencyValues.map(item => {
-        let result = Number(item / total * 100).toFixed(2);
-        return result
+        return Number(item / total * 100).toFixed(2);
     });
 
     simpleFrequencyValues = simpleFrequencyValues.map(item => {
