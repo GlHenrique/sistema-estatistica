@@ -40,9 +40,19 @@ export default function DescriptiveStatistics() {
 
     const handleCalculate = (event) => {
         event.preventDefault();
+        if (!method) {
+            document.getElementsByName('method')[0].focus();
+            // TODO Show SnackBar if this
+            return false;
+        }
+        if (!analyze) {
+            document.getElementsByName('analyze')[0].focus();
+            return false
+        }
         setVariablePropName(variableName);
         setCalculating(true);
         let arrayFormatted = values.split(';');
+        arrayFormatted = arrayFormatted.filter(item => item !== ''); // Removendo index vazios.
         if (analyze === 'discreteQuantitative') {
             setTimeout(() => {
                 setCalculating(false);
@@ -69,6 +79,17 @@ export default function DescriptiveStatistics() {
                 setValues('');
                 setVariableName('');
             }, 2000);
+            return;
+        }
+        if (analyze === 'qualitative' && order === 'true') {
+            setTimeout(() => {
+                setCalculating(false);
+                arrayFormatted.sort();
+                setFormattedValues(arrayFormatted);
+                setShowTable(true);
+                setValues('');
+                setVariableName('');
+            }, 2000)
         }
     };
 
@@ -113,7 +134,7 @@ export default function DescriptiveStatistics() {
                                     <Grid container justify="space-between">
                                         <FormControl required component="fieldset" className={classes.formControl}>
                                             <FormLabel component="legend">Método de avaliação</FormLabel>
-                                            <RadioGroup name="Method" value={method}
+                                            <RadioGroup name="method" value={method}
                                                         onChange={(event => setMethod(event.target.value))}>
                                                 <FormControlLabel
                                                     value="population"
@@ -129,7 +150,7 @@ export default function DescriptiveStatistics() {
                                         </FormControl>
                                         <FormControl required component="fieldset" className={classes.formControl}>
                                             <FormLabel component="legend">Análise:</FormLabel>
-                                            <RadioGroup name="Analyze" value={analyze}
+                                            <RadioGroup name="analyze" value={analyze}
                                                         onChange={(event => setAnalyze(event.target.value))}>
                                                 <FormControlLabel
                                                     value="qualitative"

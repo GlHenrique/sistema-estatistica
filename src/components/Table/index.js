@@ -25,8 +25,6 @@ export default function TableComponent(props) {
         };
     }
 
-    console.log(variableValues);
-
     const simpleFrequency = variableValues.reduce((age, count) => {
         if (!age[count]) {
             age[count] = 1;
@@ -36,8 +34,6 @@ export default function TableComponent(props) {
         return age;
 
     }, {});
-
-    console.log(simpleFrequency);
 
     const tableRow = Object.getOwnPropertyNames(simpleFrequency);
 
