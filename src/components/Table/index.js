@@ -1,38 +1,89 @@
-import React from 'react';
-import { Paper, Table, TableBody, TableContainer, TableHead, TableRow, } from "@material-ui/core";
-import { StyledTableCell, StyledTableRow, useStyles, } from './styles';
-import { accumulate } from '../../utils/accumulator';
+import React from "react";
+import {
+  Paper,
+  Table,
+  TableBody,
+  TableContainer,
+  TableHead,
+  TableRow
+} from "@material-ui/core";
+import { StyledTableCell, StyledTableRow, useStyles } from "./styles";
+import { accumulate } from "../../utils/accumulator";
 
 export default function TableComponent(props) {
+  const { variableValues, variableName, total, isContinue } = props;
+  const classes = useStyles();
 
-    const { variableValues, variableName, total } = props;
-    const classes = useStyles();
+  let rows = [];
 
-    const rows = [];
+  function createData(
+    variableName,
+    simpleFrequency,
+    relativeFrequency,
+    accumulatedFrequency,
+    accumulatedPercentageFrequency
+  ) {
+    return {
+      variableName,
+      simpleFrequency,
+      relativeFrequency,
+      accumulatedFrequency,
+      accumulatedPercentageFrequency
+    };
+  }
 
-    function createData(
-        variableName,
-        simpleFrequency,
-        relativeFrequency,
-        accumulatedFrequency,
-        accumulatedPercentageFrequency) {
-        return {
-            variableName,
-            simpleFrequency,
-            relativeFrequency,
-            accumulatedFrequency,
-            accumulatedPercentageFrequency
-        };
+  if (isContinue) {
+    let amplitude =
+      variableValues[variableValues.length - 1] - variableValues[0] + 1;
+    const k = parseInt(Math.sqrt(total));
+    const previousK = k - 1;
+    const successor = k + 1;
+    const arrayK = [previousK, k, successor];
+    let interval;
+    let linesCount;
+
+    for (let i = 0; i < arrayK.length; i++) {
+      if (amplitude % arrayK[0] === 0) {
+        linesCount = arrayK[0];
+        interval = amplitude / arrayK[0];
+        break;
+      } else if (amplitude % arrayK[1] === 0) {
+        interval = amplitude / arrayK[1];
+        linesCount = arrayK[1];
+        break;
+      } else if (amplitude % arrayK[2] === 0) {
+        linesCount = arrayK[2];
+        interval = amplitude / arrayK[2];
+        break;
+      } else {
+        amplitude++;
+        i = 0;
+      }
     }
 
-    const simpleFrequency = variableValues.reduce((age, count) => {
-        if (!age[count]) {
-            age[count] = 1;
-        } else {
-            age[count]++;
-        }
-        return age;
+    let minValue = variableValues[0];
+    let breakPoints = [minValue];
 
+    for (let i = 0; i < linesCount; i++) {
+      // rows.push(variableValues.filter(value => {return value < minValue}));
+      console.log(minValue);
+
+      rows.push([]);
+
+      minValue += interval;
+      breakPoints.push(minValue);
+    }
+
+    console.log(rows);
+    console.log(breakPoints);
+  } else {
+    const simpleFrequency = variableValues.reduce((age, count) => {
+      if (!age[count]) {
+        age[count] = 1;
+      } else {
+        age[count]++;
+      }
+      return age;
     }, {});
 
     const tableRow = Object.getOwnPropertyNames(simpleFrequency);
@@ -41,73 +92,87 @@ export default function TableComponent(props) {
     let accumulatedFrequence = simpleFrequencyValues;
 
     simpleFrequencyValues = simpleFrequencyValues.map(item => {
-        return Number(item / total * 100).toFixed(2);
+      return Number((item / total) * 100).toFixed(2);
     });
 
     simpleFrequencyValues = simpleFrequencyValues.map(item => {
-        item = Number(item);
-        let parseItem = Math.trunc(item);
-        let floatItem = Number((item - parseItem).toFixed(2));
-        if (floatItem >= 0.5) {
-            return parseItem + 1;
-        }
-        return parseItem // Relative Frequency
+      item = Number(item);
+      let parseItem = Math.trunc(item);
+      let floatItem = Number((item - parseItem).toFixed(2));
+      if (floatItem >= 0.5) {
+        return parseItem + 1;
+      }
+      return parseItem; // Relative Frequency
     });
 
     for (let i of tableRow) {
-        rows.push(createData([i], simpleFrequency[i]))
+      rows.push(createData([i], simpleFrequency[i]));
     }
 
     for (let i = 0; i < simpleFrequencyValues.length; i++) {
-        rows[i].relativeFrequency = simpleFrequencyValues[i];
+      rows[i].relativeFrequency = simpleFrequencyValues[i];
     }
 
     accumulatedFrequence = accumulate(accumulatedFrequence);
     let accumulatedPercentageFrequency = accumulate(simpleFrequencyValues);
 
     for (let i = 0; i < rows.length; i++) {
-        rows[i].accumulatedFrequency = accumulatedFrequence[i];
-        rows[i].accumulatedPercentageFrequency = accumulatedPercentageFrequency[i];
-        if (rows[i].accumulatedPercentageFrequency > 100) {
-            rows[i].accumulatedPercentageFrequency = 100;
-        }
+      rows[i].accumulatedFrequency = accumulatedFrequence[i];
+      rows[i].accumulatedPercentageFrequency =
+        accumulatedPercentageFrequency[i];
+      if (rows[i].accumulatedPercentageFrequency > 100) {
+        rows[i].accumulatedPercentageFrequency = 100;
+      }
     }
+  }
 
-    return (
-        <TableContainer component={Paper}>
-            <Table className={classes.table} aria-label="customized table">
-                <TableHead>
-                    <TableRow>
-                        <StyledTableCell>{variableName}</StyledTableCell>
-                        <StyledTableCell align="right">Frequência simples</StyledTableCell>
-                        <StyledTableCell align="right">Frequência relativa</StyledTableCell>
-                        <StyledTableCell align="right">Frequência acumulada</StyledTableCell>
-                        <StyledTableCell align="right">Frequência acumulada percentual</StyledTableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {rows.map((row, index) => (
-                        <StyledTableRow key={index}>
-                            <StyledTableCell component="th" scope="row">
-                                {row.variableName}
-                            </StyledTableCell>
-                            <StyledTableCell align="center">{row.simpleFrequency}</StyledTableCell>
-                            <StyledTableCell align="center">{row.relativeFrequency}%</StyledTableCell>
-                            <StyledTableCell align="center">{row.accumulatedFrequency}</StyledTableCell>
-                            <StyledTableCell align="center">{row.accumulatedPercentageFrequency}%</StyledTableCell>
-                        </StyledTableRow>
-                    ))}
-                    <StyledTableRow>
-                        <StyledTableCell component="th" scope="row">
-                            Total: {total}
-                        </StyledTableCell>
-                        <StyledTableCell align="right" />
-                        <StyledTableCell align="right" />
-                        <StyledTableCell align="right" />
-                        <StyledTableCell align="right" />
-                    </StyledTableRow>
-                </TableBody>
-            </Table>
-        </TableContainer>
-    );
+  return (
+    <TableContainer component={Paper}>
+      <Table className={classes.table} aria-label="customized table">
+        <TableHead>
+          <TableRow>
+            <StyledTableCell>{variableName}</StyledTableCell>
+            <StyledTableCell align="right">Frequência simples</StyledTableCell>
+            <StyledTableCell align="right">Frequência relativa</StyledTableCell>
+            <StyledTableCell align="right">
+              Frequência acumulada
+            </StyledTableCell>
+            <StyledTableCell align="right">
+              Frequência acumulada percentual
+            </StyledTableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {rows.map((row, index) => (
+            <StyledTableRow key={index}>
+              <StyledTableCell component="th" scope="row">
+                {row.variableName}
+              </StyledTableCell>
+              <StyledTableCell align="center">
+                {row.simpleFrequency}
+              </StyledTableCell>
+              <StyledTableCell align="center">
+                {row.relativeFrequency}%
+              </StyledTableCell>
+              <StyledTableCell align="center">
+                {row.accumulatedFrequency}
+              </StyledTableCell>
+              <StyledTableCell align="center">
+                {row.accumulatedPercentageFrequency}%
+              </StyledTableCell>
+            </StyledTableRow>
+          ))}
+          <StyledTableRow>
+            <StyledTableCell component="th" scope="row">
+              Total: {total}
+            </StyledTableCell>
+            <StyledTableCell align="right" />
+            <StyledTableCell align="right" />
+            <StyledTableCell align="right" />
+            <StyledTableCell align="right" />
+          </StyledTableRow>
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
 }

@@ -27,12 +27,14 @@ export default function DescriptiveStatistics() {
     document.title = 'Estatística Descritiva';
 
     const classes = useStyles();
-    const [variableName, setVariableName] = useState('');
-    const [method, setMethod] = useState('');
-    const [analyze, setAnalyze] = useState('');
+    const [isContinue, setIsContinue] = useState(false);
+    const [variableName, setVariableName] = useState('teste');
+    const [method, setMethod] = useState('population');
+    const [analyze, setAnalyze] = useState('continueQuantitative');
     const [order, setOrder] = useState(null);
     const [showOrder, setShowOrder] = useState(false);
-    const [values, setValues] = useState('56;14;78;99;63;100;42;36;36;36;36');
+    const [values, setValues] = 
+    useState('300;310;312;314;320;326;330;331;332;340;348;349;350;361;378;379;380;383;384;400');
     const [calculating, setCalculating] = useState(false);
     const [showTable, setShowTable] = useState(false);
     const [formattedValues, setFormattedValues] = useState([]);
@@ -91,14 +93,34 @@ export default function DescriptiveStatistics() {
                 setVariableName('');
             }, 2000)
         }
+        if (analyze === 'continueQuantitative') {
+            setTimeout(() => {
+                setCalculating(false);
+                arrayFormatted = arrayFormatted.map(item => {
+                    return Number(item); // Convertendo para Number
+                });
+                arrayFormatted.sort(
+                    (comparingA, comparingB) => {
+                        return comparingA - comparingB;
+                    }
+                ); // Organizando do menor para o maior
+                setFormattedValues(arrayFormatted);
+                setShowTable(true);
+            }, 2000)
+        }
     };
 
     useEffect(() => {
         if (analyze === 'qualitative') {
             setShowOrder(true);
-            return
+        } else {
+            setShowOrder(false);
         }
-        setShowOrder(false);
+        if (analyze === 'continueQuantitative') {
+            setIsContinue(true);
+        } else {
+            setIsContinue(false);
+        }
     }, [analyze]);
 
     return (
@@ -235,6 +257,7 @@ export default function DescriptiveStatistics() {
                                 variableName={variablePropName}
                                 variableValues={formattedValues}
                                 total={formattedValues.length}
+                                isContinue={isContinue}
                             />
                         </Box>
                     </Grid>
