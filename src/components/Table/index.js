@@ -73,10 +73,6 @@ export default function TableComponent(props) {
       }
     }
 
-
-
-
-
     const filtredValues = [];
     var j = 0;
     for (let i of breakPoints) {
@@ -92,12 +88,16 @@ export default function TableComponent(props) {
       } else {
         rows.push(createData(`${breakPoints[i - 1]} - ${breakPoints[i]}`));
       }
+      rows[i].simpleFrequency = filtredValues[i].length // Show simple Frequency
+      rows[i].relativeFrequency = (filtredValues[i].length / total) * 100;
+      if (i === 0) {
+        rows[i].accumulatedFrequency = rows[i].simpleFrequency; // Startpoint of accumulator
+        rows[i].accumulatedPercentageFrequency = rows[i].relativeFrequency;
+      } else {
+        rows[i].accumulatedFrequency = rows[i - 1].accumulatedFrequency + rows[i].simpleFrequency;
+        rows[i].accumulatedPercentageFrequency = rows[i - 1].accumulatedPercentageFrequency + rows[i].relativeFrequency;
+      }
     }
-    console.log(filtredValues);
-    console.log(rows);
-
-
-
 
   } else {
     const simpleFrequency = variableValues.reduce((age, count) => {
@@ -138,6 +138,7 @@ export default function TableComponent(props) {
 
     accumulatedFrequence = accumulate(accumulatedFrequence);
     let accumulatedPercentageFrequency = accumulate(simpleFrequencyValues);
+    
 
     for (let i = 0; i < rows.length; i++) {
       rows[i].accumulatedFrequency = accumulatedFrequence[i];
