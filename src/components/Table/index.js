@@ -61,21 +61,44 @@ export default function TableComponent(props) {
       }
     }
 
-    let minValue = variableValues[0];
+    let minValue = variableValues[0] + interval;
     let breakPoints = [minValue];
 
     for (let i = 0; i < linesCount; i++) {
       // rows.push(variableValues.filter(value => {return value < minValue}));
-      console.log(minValue);
-
-      rows.push([]);
-
+      // rows.push([]);
       minValue += interval;
-      breakPoints.push(minValue);
+      if (breakPoints.length <= linesCount - 1) {
+        breakPoints.push(minValue);
+      }
     }
 
+
+
+
+
+    const filtredValues = [];
+    var j = 0;
+    for (let i of breakPoints) {
+      filtredValues.push(variableValues.filter(value => value < i));
+      variableValues.splice(0, filtredValues[j].length);
+      j++;
+    }
+
+    for (let i = 0; i < filtredValues.length; i++) {
+      // rows[i].variableValues = i
+      if (i === 0) {
+        rows.push(createData(`${filtredValues[i][0]} - ${breakPoints[i]}`));
+      } else {
+        rows.push(createData(`${breakPoints[i - 1]} - ${breakPoints[i]}`));
+      }
+    }
+    console.log(filtredValues);
     console.log(rows);
-    console.log(breakPoints);
+
+
+
+
   } else {
     const simpleFrequency = variableValues.reduce((age, count) => {
       if (!age[count]) {
