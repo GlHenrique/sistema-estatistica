@@ -11,7 +11,12 @@ import { StyledTableCell, StyledTableRow, useStyles } from "./styles";
 import { accumulate } from "../../utils/accumulator";
 
 export default function TableComponent(props) {
-  const { variableValues, variableName, total, isContinue } = props;
+  const {
+    variableValues,
+    variableName,
+    total,
+    isContinue,
+    method } = props;
   const classes = useStyles();
 
   let rows = [];
@@ -99,7 +104,7 @@ export default function TableComponent(props) {
       }
     }
 
-  } else {
+  } if (!isContinue) {
     const simpleFrequency = variableValues.reduce((age, count) => {
       if (!age[count]) {
         age[count] = 1;
@@ -138,7 +143,7 @@ export default function TableComponent(props) {
 
     accumulatedFrequence = accumulate(accumulatedFrequence);
     let accumulatedPercentageFrequency = accumulate(simpleFrequencyValues);
-    
+
 
     for (let i = 0; i < rows.length; i++) {
       rows[i].accumulatedFrequency = accumulatedFrequence[i];
@@ -153,6 +158,10 @@ export default function TableComponent(props) {
   return (
     <TableContainer component={Paper}>
       <Table className={classes.table} aria-label="customized table">
+        <caption>
+          Total: {total} <br/>
+          Dados coletados através de {method === 'population' ? 'população' : 'amostra'}
+          </caption>
         <TableHead>
           <TableRow>
             <StyledTableCell>{variableName}</StyledTableCell>
@@ -186,15 +195,6 @@ export default function TableComponent(props) {
               </StyledTableCell>
             </StyledTableRow>
           ))}
-          <StyledTableRow>
-            <StyledTableCell component="th" scope="row">
-              Total: {total}
-            </StyledTableCell>
-            <StyledTableCell align="right" />
-            <StyledTableCell align="right" />
-            <StyledTableCell align="right" />
-            <StyledTableCell align="right" />
-          </StyledTableRow>
         </TableBody>
       </Table>
     </TableContainer>

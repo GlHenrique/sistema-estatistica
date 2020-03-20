@@ -28,17 +28,17 @@ export default function DescriptiveStatistics() {
 
     const classes = useStyles();
     const [isContinue, setIsContinue] = useState(false);
-    const [variableName, setVariableName] = useState('teste');
-    const [method, setMethod] = useState('population');
-    const [analyze, setAnalyze] = useState('continueQuantitative');
+    const [variableName, setVariableName] = useState('');
+    const [method, setMethod] = useState('');
+    const [analyze, setAnalyze] = useState('');
     const [order, setOrder] = useState(null);
     const [showOrder, setShowOrder] = useState(false);
-    const [values, setValues] = 
-    useState('300;310;312;314;320;326;330;331;332;340;348;349;350;361;378;379;380;383;384;400');
+    const [values, setValues] = useState('');
     const [calculating, setCalculating] = useState(false);
     const [showTable, setShowTable] = useState(false);
     const [formattedValues, setFormattedValues] = useState([]);
     const [variablePropName, setVariablePropName] = useState('');
+    const [disableForm, setDisableForm] = useState(false);
 
     const handleCalculate = (event) => {
         event.preventDefault();
@@ -68,8 +68,8 @@ export default function DescriptiveStatistics() {
                 ); // Organizando do menor para o maior
                 setFormattedValues(arrayFormatted);
                 setShowTable(true);
-                setValues('');
-                setVariableName('');
+                // setValues('');
+                // setVariableName('');
             }, 2000);
             return;
         }
@@ -78,8 +78,8 @@ export default function DescriptiveStatistics() {
                 setCalculating(false);
                 setFormattedValues(arrayFormatted);
                 setShowTable(true);
-                setValues('');
-                setVariableName('');
+                // setValues('');
+                // setVariableName('');
             }, 2000);
             return;
         }
@@ -89,13 +89,14 @@ export default function DescriptiveStatistics() {
                 arrayFormatted.sort();
                 setFormattedValues(arrayFormatted);
                 setShowTable(true);
-                setValues('');
-                setVariableName('');
+                // setValues('');
+                // setVariableName('');
             }, 2000)
         }
         if (analyze === 'continueQuantitative') {
             setTimeout(() => {
                 setCalculating(false);
+                // setIsContinue(true);
                 arrayFormatted = arrayFormatted.map(item => {
                     return Number(item); // Convertendo para Number
                 });
@@ -107,7 +108,8 @@ export default function DescriptiveStatistics() {
                 setFormattedValues(arrayFormatted);
                 setShowTable(true);
             }, 2000)
-        }
+        };
+        setDisableForm(true);
     };
 
     useEffect(() => {
@@ -116,22 +118,23 @@ export default function DescriptiveStatistics() {
         } else {
             setShowOrder(false);
         }
+
         if (analyze === 'continueQuantitative') {
             setIsContinue(true);
         } else {
             setIsContinue(false);
         }
-    }, [analyze]);
+    }, [analyze, isContinue]);
 
     return (
         <>
-            <Header titleToolbar="Lookup - Estatística Descritiva"/>
-            <Grid container justify="center" alignItems="center" style={{position: 'absolute', top: 155}}>
+            <Header titleToolbar="Lookup - Estatística Descritiva" />
+            <Grid container justify="center" alignItems="center" style={{ position: 'absolute', top: 155 }}>
                 <Grid item className={classes.cardSize}>
                     <Paper elevation={3}>
                         <Card>
                             <Box display="flex" alignItems="center">
-                                <GoBack/>
+                                <GoBack />
                                 <Typography variant="h5" component="h2">
                                     Descritiva
                                 </Typography>
@@ -149,62 +152,63 @@ export default function DescriptiveStatistics() {
                                         label="Nome da variável"
                                         variant="outlined"
                                         margin="normal"
+                                        disabled={disableForm}
                                         value={variableName}
                                         onChange={event => setVariableName(event.target.value)}
                                         fullWidth
                                     />
                                     <Grid container justify="space-between">
-                                        <FormControl required component="fieldset" className={classes.formControl}>
+                                        <FormControl disabled={disableForm} required component="fieldset" className={classes.formControl}>
                                             <FormLabel component="legend">Método de avaliação</FormLabel>
                                             <RadioGroup name="method" value={method}
-                                                        onChange={(event => setMethod(event.target.value))}>
+                                                onChange={(event => setMethod(event.target.value))}>
                                                 <FormControlLabel
                                                     value="population"
-                                                    control={<Radio/>}
+                                                    control={<Radio />}
                                                     label="População"
                                                 />
                                                 <FormControlLabel
                                                     value="sample"
-                                                    control={<Radio/>}
+                                                    control={<Radio />}
                                                     label="Amostra"
                                                 />
                                             </RadioGroup>
                                         </FormControl>
-                                        <FormControl required component="fieldset" className={classes.formControl}>
+                                        <FormControl disabled={disableForm} required component="fieldset" className={classes.formControl}>
                                             <FormLabel component="legend">Análise:</FormLabel>
                                             <RadioGroup name="analyze" value={analyze}
-                                                        onChange={(event => setAnalyze(event.target.value))}>
+                                                onChange={(event => setAnalyze(event.target.value))}>
                                                 <FormControlLabel
                                                     value="qualitative"
-                                                    control={<Radio/>}
+                                                    control={<Radio />}
                                                     label="Qualitativa"
                                                 />
                                                 <FormControlLabel
                                                     value="discreteQuantitative"
-                                                    control={<Radio/>}
+                                                    control={<Radio />}
                                                     label="Quantitativa Discreta"
                                                 />
                                                 <FormControlLabel
                                                     value="continueQuantitative"
-                                                    control={<Radio/>}
+                                                    control={<Radio />}
                                                     label="Quantitativa Contínua"
                                                 />
                                             </RadioGroup>
                                         </FormControl>
                                     </Grid>
                                     {showOrder && (
-                                        <FormControl required component="fieldset" className={classes.formControl}>
+                                        <FormControl disabled={disableForm} required component="fieldset" className={classes.formControl}>
                                             <FormLabel component="legend">A ordem importa?</FormLabel>
                                             <RadioGroup name="order" value={order}
-                                                        onChange={(event => setOrder(event.target.value))}>
+                                                onChange={(event => setOrder(event.target.value))}>
                                                 <FormControlLabel
                                                     value="true"
-                                                    control={<Radio/>}
+                                                    control={<Radio />}
                                                     label="Sim"
                                                 />
                                                 <FormControlLabel
                                                     value="false"
-                                                    control={<Radio/>}
+                                                    control={<Radio />}
                                                     label="Não"
                                                 />
                                             </RadioGroup>
@@ -224,8 +228,9 @@ export default function DescriptiveStatistics() {
                                             variant="outlined"
                                             required
                                             fullWidth
+                                            disabled={disableForm}
                                             value={values}
-                                            inputProps={{spellCheck: false}}
+                                            inputProps={{ spellCheck: false }}
                                             onChange={event => setValues(event.target.value)}
                                             placeholder="Insira os valores separados por ponto e vírgula (;)"
                                         />
@@ -236,11 +241,12 @@ export default function DescriptiveStatistics() {
                                                 variant="contained"
                                                 size="large"
                                                 type="submit"
+                                                disabled={disableForm}
                                                 color="primary">
                                                 {calculating ?
                                                     <CircularProgress
                                                         size={20}
-                                                        style={{color: 'rgb(220, 0, 78)'}}/>
+                                                        style={{ color: 'rgb(220, 0, 78)' }} />
                                                     : 'Calcular'}
                                             </Button>
                                         </Grid>
@@ -251,13 +257,14 @@ export default function DescriptiveStatistics() {
                     </Paper>
                 </Grid>
                 {showTable ? (
-                    <Grid item style={{maxWidth: '100%', margin: '32px'}}>
+                    <Grid item style={{ maxWidth: '100%', margin: '32px' }}>
                         <Box>
                             <TableComponent
                                 variableName={variablePropName}
                                 variableValues={formattedValues}
                                 total={formattedValues.length}
                                 isContinue={isContinue}
+                                method={method}
                             />
                         </Box>
                     </Grid>
