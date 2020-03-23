@@ -17,7 +17,8 @@ import {
     Radio,
     CircularProgress,
     Fab,
-    Icon
+    Icon,
+    Snackbar
 } from '@material-ui/core';
 import {
     FabContainer,
@@ -26,6 +27,7 @@ import {
 import GoBack from "../../components/GoBack";
 import { useState } from 'react';
 import TableComponent from "../../components/Table";
+import Alert from "../../components/Alert";
 
 export default function DescriptiveStatistics() {
     document.title = 'Estatística Descritiva';
@@ -43,6 +45,7 @@ export default function DescriptiveStatistics() {
     const [formattedValues, setFormattedValues] = useState([]);
     const [variablePropName, setVariablePropName] = useState('');
     const [disableForm, setDisableForm] = useState(false);
+    const [showSnackbar, setShowSnackbar] = useState(false);
 
     const handleCalculate = (event) => {
         event.preventDefault();
@@ -64,6 +67,10 @@ export default function DescriptiveStatistics() {
                 arrayFormatted = arrayFormatted.map(item => {
                     return Number(item); // Convertendo para Number
                 });
+                if (arrayFormatted.includes(NaN)) {
+                    setShowSnackbar(true);
+                    return false
+                }
                 arrayFormatted.sort(
                     (comparingA, comparingB) => {
                         return comparingA - comparingB;
@@ -71,6 +78,7 @@ export default function DescriptiveStatistics() {
                 ); // Organizando do menor para o maior
                 setFormattedValues(arrayFormatted);
                 setShowTable(true);
+                setDisableForm(true);
             }, 2000);
         }
         if (analyze === 'qualitative' && order === 'false') {
@@ -78,6 +86,7 @@ export default function DescriptiveStatistics() {
                 setCalculating(false);
                 setFormattedValues(arrayFormatted);
                 setShowTable(true);
+                setDisableForm(true);
             }, 2000);
         }
         if (analyze === 'qualitative' && order === 'true') {
@@ -86,15 +95,19 @@ export default function DescriptiveStatistics() {
                 arrayFormatted.sort();
                 setFormattedValues(arrayFormatted);
                 setShowTable(true);
+                setDisableForm(true);
             }, 2000)
         }
         if (analyze === 'continueQuantitative') {
             setTimeout(() => {
                 setCalculating(false);
-                // setIsContinue(true);
                 arrayFormatted = arrayFormatted.map(item => {
                     return Number(item); // Convertendo para Number
                 });
+                if (arrayFormatted.includes(NaN)) {
+                    setShowSnackbar(true);
+                    return false
+                }
                 arrayFormatted.sort(
                     (comparingA, comparingB) => {
                         return comparingA - comparingB;
@@ -102,9 +115,13 @@ export default function DescriptiveStatistics() {
                 ); // Organizando do menor para o maior
                 setFormattedValues(arrayFormatted);
                 setShowTable(true);
+                setDisableForm(true);
             }, 2000)
         }
-        setDisableForm(true);
+    };
+
+    const closeSnackbar = (event, reason) => {
+        setShowSnackbar(false);
     };
 
     useEffect(() => {
@@ -128,7 +145,8 @@ export default function DescriptiveStatistics() {
     return (
         <>
             <Header titleToolbar="Lookup - Estatística Descritiva"/>
-            <Grid container justify="center" alignItems="center" style={{position: 'absolute', top: 155, marginBottom: 64}}>
+            <Grid container justify="center" alignItems="center"
+                  style={{position: 'absolute', top: 155, marginBottom: 64}}>
                 <Grid item className={classes.cardSize} style={{marginBottom: '16px'}}>
                     <Paper elevation={3}>
                         <Card>
@@ -258,7 +276,7 @@ export default function DescriptiveStatistics() {
                         </Card>
                     </Paper>
                 </Grid>
-                {showTable ? (
+                {showTable && (
                     <TableComponent
                         variableName={variablePropName}
                         variableValues={formattedValues}
@@ -267,13 +285,20 @@ export default function DescriptiveStatistics() {
                         method={method}
                         analyze={analyze}
                     />
-                ) : null}
+                )}
             </Grid>
-            <FabContainer>
-                <Fab color="secondary" onClick={() => handleReload()}>
-                    <Icon title="Nova consulta">autorenew</Icon>
-                </Fab>
-            </FabContainer>
+            {showTable && (
+                <FabContainer>
+                    <Fab color="secondary" onClick={() => handleReload()}>
+                        <Icon title="Nova consulta">autorenew</Icon>
+                    </Fab>
+                </FabContainer>
+            )}
+            <Snackbar open={showSnackbar} autoHideDuration={7000} onClose={closeSnackbar}>
+                <Alert onClose={closeSnackbar} severity="error">
+                    Ops! Você não inseriu valores permitidos!
+                </Alert>
+            </Snackbar>
         </>
     )
 }
