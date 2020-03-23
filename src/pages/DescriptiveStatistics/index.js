@@ -14,11 +14,10 @@ import {
     FormControlLabel,
     FormLabel,
     RadioGroup,
-    Radio, CircularProgress,
+    Radio,
+    CircularProgress
 } from '@material-ui/core';
-import {
-    useStyles
-} from './styles';
+import { useStyles } from './styles';
 import GoBack from "../../components/GoBack";
 import { useState } from 'react';
 import TableComponent from "../../components/Table";
@@ -44,7 +43,6 @@ export default function DescriptiveStatistics() {
         event.preventDefault();
         if (!method) {
             document.getElementsByName('method')[0].focus();
-            // TODO Show SnackBar if this
             return false;
         }
         if (!analyze) {
@@ -68,8 +66,6 @@ export default function DescriptiveStatistics() {
                 ); // Organizando do menor para o maior
                 setFormattedValues(arrayFormatted);
                 setShowTable(true);
-                // setValues('');
-                // setVariableName('');
             }, 2000);
             return;
         }
@@ -78,8 +74,6 @@ export default function DescriptiveStatistics() {
                 setCalculating(false);
                 setFormattedValues(arrayFormatted);
                 setShowTable(true);
-                // setValues('');
-                // setVariableName('');
             }, 2000);
             return;
         }
@@ -89,8 +83,6 @@ export default function DescriptiveStatistics() {
                 arrayFormatted.sort();
                 setFormattedValues(arrayFormatted);
                 setShowTable(true);
-                // setValues('');
-                // setVariableName('');
             }, 2000)
         }
         if (analyze === 'continueQuantitative') {
@@ -108,7 +100,7 @@ export default function DescriptiveStatistics() {
                 setFormattedValues(arrayFormatted);
                 setShowTable(true);
             }, 2000)
-        };
+        }
         setDisableForm(true);
     };
 
@@ -128,13 +120,13 @@ export default function DescriptiveStatistics() {
 
     return (
         <>
-            <Header titleToolbar="Lookup - Estatística Descritiva" />
-            <Grid container justify="center" alignItems="center" style={{ position: 'absolute', top: 155 }}>
-                <Grid item className={classes.cardSize}>
+            <Header titleToolbar="Lookup - Estatística Descritiva"/>
+            <Grid container justify="center" alignItems="center" style={{position: 'absolute', top: 155}}>
+                <Grid item className={classes.cardSize} style={{marginBottom: '16px'}}>
                     <Paper elevation={3}>
                         <Card>
                             <Box display="flex" alignItems="center">
-                                <GoBack />
+                                <GoBack/>
                                 <Typography variant="h5" component="h2">
                                     Descritiva
                                 </Typography>
@@ -158,57 +150,60 @@ export default function DescriptiveStatistics() {
                                         fullWidth
                                     />
                                     <Grid container justify="space-between">
-                                        <FormControl disabled={disableForm} required component="fieldset" className={classes.formControl}>
+                                        <FormControl disabled={disableForm} required component="fieldset"
+                                                     className={classes.formControl}>
                                             <FormLabel component="legend">Método de avaliação</FormLabel>
                                             <RadioGroup name="method" value={method}
-                                                onChange={(event => setMethod(event.target.value))}>
+                                                        onChange={(event => setMethod(event.target.value))}>
                                                 <FormControlLabel
                                                     value="population"
-                                                    control={<Radio />}
+                                                    control={<Radio/>}
                                                     label="População"
                                                 />
                                                 <FormControlLabel
                                                     value="sample"
-                                                    control={<Radio />}
+                                                    control={<Radio/>}
                                                     label="Amostra"
                                                 />
                                             </RadioGroup>
                                         </FormControl>
-                                        <FormControl disabled={disableForm} required component="fieldset" className={classes.formControl}>
+                                        <FormControl disabled={disableForm} required component="fieldset"
+                                                     className={classes.formControl}>
                                             <FormLabel component="legend">Análise:</FormLabel>
                                             <RadioGroup name="analyze" value={analyze}
-                                                onChange={(event => setAnalyze(event.target.value))}>
+                                                        onChange={(event => setAnalyze(event.target.value))}>
                                                 <FormControlLabel
                                                     value="qualitative"
-                                                    control={<Radio />}
+                                                    control={<Radio/>}
                                                     label="Qualitativa"
                                                 />
                                                 <FormControlLabel
                                                     value="discreteQuantitative"
-                                                    control={<Radio />}
+                                                    control={<Radio/>}
                                                     label="Quantitativa Discreta"
                                                 />
                                                 <FormControlLabel
                                                     value="continueQuantitative"
-                                                    control={<Radio />}
+                                                    control={<Radio/>}
                                                     label="Quantitativa Contínua"
                                                 />
                                             </RadioGroup>
                                         </FormControl>
                                     </Grid>
                                     {showOrder && (
-                                        <FormControl disabled={disableForm} required component="fieldset" className={classes.formControl}>
+                                        <FormControl disabled={disableForm} required component="fieldset"
+                                                     className={classes.formControl}>
                                             <FormLabel component="legend">A ordem importa?</FormLabel>
                                             <RadioGroup name="order" value={order}
-                                                onChange={(event => setOrder(event.target.value))}>
+                                                        onChange={(event => setOrder(event.target.value))}>
                                                 <FormControlLabel
                                                     value="true"
-                                                    control={<Radio />}
+                                                    control={<Radio/>}
                                                     label="Sim"
                                                 />
                                                 <FormControlLabel
                                                     value="false"
-                                                    control={<Radio />}
+                                                    control={<Radio/>}
                                                     label="Não"
                                                 />
                                             </RadioGroup>
@@ -230,7 +225,7 @@ export default function DescriptiveStatistics() {
                                             fullWidth
                                             disabled={disableForm}
                                             value={values}
-                                            inputProps={{ spellCheck: false }}
+                                            inputProps={{spellCheck: false}}
                                             onChange={event => setValues(event.target.value)}
                                             placeholder="Insira os valores separados por ponto e vírgula (;)"
                                         />
@@ -246,7 +241,7 @@ export default function DescriptiveStatistics() {
                                                 {calculating ?
                                                     <CircularProgress
                                                         size={20}
-                                                        style={{ color: 'rgb(220, 0, 78)' }} />
+                                                        style={{color: 'rgb(220, 0, 78)'}}/>
                                                     : 'Calcular'}
                                             </Button>
                                         </Grid>
@@ -257,17 +252,13 @@ export default function DescriptiveStatistics() {
                     </Paper>
                 </Grid>
                 {showTable ? (
-                    <Grid item style={{ maxWidth: '100%', margin: '32px' }}>
-                        <Box>
-                            <TableComponent
-                                variableName={variablePropName}
-                                variableValues={formattedValues}
-                                total={formattedValues.length}
-                                isContinue={isContinue}
-                                method={method}
-                            />
-                        </Box>
-                    </Grid>
+                    <TableComponent
+                        variableName={variablePropName}
+                        variableValues={formattedValues}
+                        total={formattedValues.length}
+                        isContinue={isContinue}
+                        method={method}
+                    />
                 ) : null}
             </Grid>
         </>
