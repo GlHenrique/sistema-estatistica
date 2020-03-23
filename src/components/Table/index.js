@@ -12,6 +12,7 @@ import { StyledTableCell, StyledTableRow, useStyles } from "./styles";
 import { accumulate } from "../../utils/accumulator";
 import { GridItem } from "../../pages/DescriptiveStatistics/styles";
 import PieChart from "../PieChart";
+import BarChat from "../BarChart";
 
 export default function TableComponent(props) {
     const {
@@ -205,8 +206,11 @@ export default function TableComponent(props) {
                     </Table>
                 </TableContainer>
             </GridItem>
+            {/*<Grid style={{margin: 16, width: '100%', maxWidth: 1500}}>*/}
+            {/*    <PieChart title={variableName} content={rows}/>*/}
+            {/*</Grid>*/}
             <Grid style={{margin: 16, width: '100%', maxWidth: 1500}}>
-                <PieChart title={variableName} content={rows}/>
+                <BarChat title={variableName} content={rows}/>
             </Grid>
         </>
     );
