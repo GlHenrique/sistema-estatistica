@@ -22,6 +22,6 @@ export const GridItem = styled(Grid)`
   max-width: 100%;
   margin: 32px 0 32px 64px;
   @media(max-width: 600px) {
-  margin: 32px 0 32px 32px;
+  margin: 0;
   }
 `;

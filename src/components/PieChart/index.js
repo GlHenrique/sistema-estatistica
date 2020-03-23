@@ -17,7 +17,7 @@ export default function PieChart(props) {
         <Paper elevation={3} style={{display: 'flex', justifyContent: 'center'}}>
             <Chart
                 data={content}
-                width={400}
+                width={100}
                 style={{flex: 1}}
             >
                 <PieSeries
@@ -27,7 +27,7 @@ export default function PieChart(props) {
                 <Title
                     text={title}
                 />
-                <Animation/>
+                <Animation duration={7000}/>
                 <EventTracker/>
                 <Tooltip/>
                 <Legend/>

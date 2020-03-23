@@ -13,6 +13,7 @@ import { accumulate } from "../../utils/accumulator";
 import { GridItem } from "../../pages/DescriptiveStatistics/styles";
 import PieChart from "../PieChart";
 import BarChat from "../BarChart";
+import BarSydeBarChart from "../BarSydeByBarChat";
 
 export default function TableComponent(props) {
     const {
@@ -20,7 +21,8 @@ export default function TableComponent(props) {
         variableName,
         total,
         isContinue,
-        method
+        method,
+        analyze
     } = props;
     const classes = useStyles();
     let rows = [];
@@ -206,12 +208,21 @@ export default function TableComponent(props) {
                     </Table>
                 </TableContainer>
             </GridItem>
-            {/*<Grid style={{margin: 16, width: '100%', maxWidth: 1500}}>*/}
-            {/*    <PieChart title={variableName} content={rows}/>*/}
-            {/*</Grid>*/}
-            <Grid style={{margin: 16, width: '100%', maxWidth: 1500}}>
-                <BarChat title={variableName} content={rows}/>
+            {analyze === 'qualitative' && (
+                <Grid style={{margin: 16, width: '100%', maxWidth: 1500}}>
+                <PieChart title={variableName} content={rows}/>
             </Grid>
+            )}
+            {analyze === 'discreteQuantitative' && (
+                <Grid style={{margin: 16, width: '100%', maxWidth: 1500}}>
+                    <BarChat title={variableName} content={rows}/>
+                </Grid>
+            )}
+            {analyze === 'continueQuantitative' && (
+                <Grid style={{margin: 16, width: '100%', maxWidth: 1500}}>
+                    <BarSydeBarChart title={variableName} content={rows}/>
+                </Grid>
+            )}
         </>
     );
 }

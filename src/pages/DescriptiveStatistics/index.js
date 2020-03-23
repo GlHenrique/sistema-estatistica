@@ -67,7 +67,6 @@ export default function DescriptiveStatistics() {
                 setFormattedValues(arrayFormatted);
                 setShowTable(true);
             }, 2000);
-            return;
         }
         if (analyze === 'qualitative' && order === 'false') {
             setTimeout(() => {
@@ -75,7 +74,6 @@ export default function DescriptiveStatistics() {
                 setFormattedValues(arrayFormatted);
                 setShowTable(true);
             }, 2000);
-            return;
         }
         if (analyze === 'qualitative' && order === 'true') {
             setTimeout(() => {
@@ -258,6 +256,7 @@ export default function DescriptiveStatistics() {
                         total={formattedValues.length}
                         isContinue={isContinue}
                         method={method}
+                        analyze={analyze}
                     />
                 ) : null}
             </Grid>
