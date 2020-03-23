@@ -15,9 +15,14 @@ import {
     FormLabel,
     RadioGroup,
     Radio,
-    CircularProgress
+    CircularProgress,
+    Fab,
+    Icon
 } from '@material-ui/core';
-import { useStyles } from './styles';
+import {
+    FabContainer,
+    useStyles
+} from './styles';
 import GoBack from "../../components/GoBack";
 import { useState } from 'react';
 import TableComponent from "../../components/Table";
@@ -116,10 +121,14 @@ export default function DescriptiveStatistics() {
         }
     }, [analyze, isContinue]);
 
+    function handleReload() {
+        window.location.reload();
+    }
+
     return (
         <>
             <Header titleToolbar="Lookup - Estatística Descritiva"/>
-            <Grid container justify="center" alignItems="center" style={{position: 'absolute', top: 155}}>
+            <Grid container justify="center" alignItems="center" style={{position: 'absolute', top: 155, marginBottom: 64}}>
                 <Grid item className={classes.cardSize} style={{marginBottom: '16px'}}>
                     <Paper elevation={3}>
                         <Card>
@@ -260,6 +269,11 @@ export default function DescriptiveStatistics() {
                     />
                 ) : null}
             </Grid>
+            <FabContainer>
+                <Fab color="secondary" onClick={() => handleReload()}>
+                    <Icon title="Nova consulta">autorenew</Icon>
+                </Fab>
+            </FabContainer>
         </>
     )
 }

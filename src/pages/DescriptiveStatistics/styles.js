@@ -25,3 +25,18 @@ export const GridItem = styled(Grid)`
   margin: 0;
   }
 `;
+
+export const FabContainer = styled.div`
+   display: flex;
+   flex-direction: column;
+   align-items: flex-end;
+   width: 60px;
+   position: fixed;
+   right: 16px;
+   bottom: 16px;
+   z-index: 2;
+   @media(max-width: 600px) {
+   right: 10px;
+   bottom: 10px;
+   }
+`;
