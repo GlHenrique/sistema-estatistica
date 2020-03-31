@@ -11,9 +11,24 @@ import {
 } from "@material-ui/core";
 import { useStyles} from "./styles";
 import mindMap from "../../assets/images/mapa_mental.png";
+import api from '../../services/api';
 
 export default function CardTitle(props) {
     const classes = useStyles();
+    const teste = 5;
+    const teste2 = [0, 2 ,3];
+    const teste3 = 'XIBIU';
+
+    function handleApi() {
+        api.post('/calculate', {
+            teste,
+            teste2,
+            teste3
+        })
+        .then(res => {
+            console.log(res);
+        })
+    }
 
     return(
         <Paper elevation={3}>
@@ -40,11 +55,8 @@ export default function CardTitle(props) {
                     </CardContent>
                 </CardActionArea>
                 <CardActions>
-                    <Button size="small" color="primary">
-                        Share
-                    </Button>
-                    <Button size="small" color="primary">
-                        Learn More
+                    <Button onClick={handleApi} size="small" color="primary">
+                        CHAMAR API
                     </Button>
                 </CardActions>
             </Card>
