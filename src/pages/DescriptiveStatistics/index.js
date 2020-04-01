@@ -28,24 +28,26 @@ import GoBack from "../../components/GoBack";
 import { useState } from 'react';
 import TableComponent from "../../components/Table";
 import Alert from "../../components/Alert";
+import api from '../../services/api';
 
 export default function DescriptiveStatistics() {
     document.title = 'Estatística Descritiva';
 
     const classes = useStyles();
     const [isContinue, setIsContinue] = useState(false);
-    const [variableName, setVariableName] = useState('');
-    const [method, setMethod] = useState('');
-    const [analyze, setAnalyze] = useState('');
-    const [order, setOrder] = useState(null);
+    const [variableName, setVariableName] = useState('Cores');
+    const [method, setMethod] = useState('population');
+    const [analyze, setAnalyze] = useState('qualitative');
+    const [order, setOrder] = useState('false');
     const [showOrder, setShowOrder] = useState(false);
-    const [values, setValues] = useState('');
+    const [values, setValues] = useState('azul;vermelho;vermelho;azul;verde;verde;amarelo');
     const [calculating, setCalculating] = useState(false);
+    const [total, setTotal] = useState(0);
     const [showTable, setShowTable] = useState(false);
-    const [formattedValues, setFormattedValues] = useState([]);
     const [variablePropName, setVariablePropName] = useState('');
     const [disableForm, setDisableForm] = useState(false);
     const [showSnackbar, setShowSnackbar] = useState(false);
+    const [rows, setRows] = useState([]);
 
     const handleCalculate = (event) => {
         event.preventDefault();
@@ -58,66 +60,30 @@ export default function DescriptiveStatistics() {
             return false
         }
         setVariablePropName(variableName);
-        setCalculating(true);
         let arrayFormatted = values.split(';');
         arrayFormatted = arrayFormatted.filter(item => item !== ''); // Removendo index vazios.
-        if (analyze === 'discreteQuantitative') {
-            setTimeout(() => {
-                setCalculating(false);
-                arrayFormatted = arrayFormatted.map(item => {
-                    return Number(item); // Convertendo para Number
-                });
-                if (arrayFormatted.includes(NaN)) {
-                    setShowSnackbar(true);
-                    return false
-                }
-                arrayFormatted.sort(
-                    (comparingA, comparingB) => {
-                        return comparingA - comparingB;
-                    }
-                ); // Organizando do menor para o maior
-                setFormattedValues(arrayFormatted);
-                setShowTable(true);
-                setDisableForm(true);
-            }, 2000);
-        }
-        if (analyze === 'qualitative' && order === 'false') {
-            setTimeout(() => {
-                setCalculating(false);
-                setFormattedValues(arrayFormatted);
-                setShowTable(true);
-                setDisableForm(true);
-            }, 2000);
-        }
-        if (analyze === 'qualitative' && order === 'true') {
-            setTimeout(() => {
-                setCalculating(false);
-                arrayFormatted.sort();
-                setFormattedValues(arrayFormatted);
-                setShowTable(true);
-                setDisableForm(true);
-            }, 2000)
-        }
-        if (analyze === 'continueQuantitative') {
-            setTimeout(() => {
-                setCalculating(false);
-                arrayFormatted = arrayFormatted.map(item => {
-                    return Number(item); // Convertendo para Number
-                });
-                if (arrayFormatted.includes(NaN)) {
-                    setShowSnackbar(true);
-                    return false
-                }
-                arrayFormatted.sort(
-                    (comparingA, comparingB) => {
-                        return comparingA - comparingB;
-                    }
-                ); // Organizando do menor para o maior
-                setFormattedValues(arrayFormatted);
-                setShowTable(true);
-                setDisableForm(true);
-            }, 2000)
-        }
+        setCalculating(true);
+        api.post('/calculate', {
+            variableName: variableName,
+            method: method,
+            analyze: analyze,
+            order: order,
+            values: arrayFormatted,
+            isContinue: isContinue
+        })
+        .then(res => {
+            console.log(res);
+            setDisableForm(true);
+            setTotal(res.data.total);
+            setRows(res.data.rows);
+            setShowTable(true);
+        })
+        .catch(error => {
+            console.log(error);
+        })
+        .finally(() => {
+            setCalculating(false);
+        });
     };
 
     const closeSnackbar = (event, reason) => {
@@ -279,11 +245,10 @@ export default function DescriptiveStatistics() {
                 {showTable && (
                     <TableComponent
                         variableName={variablePropName}
-                        variableValues={formattedValues}
-                        total={formattedValues.length}
-                        isContinue={isContinue}
+                        total={total}
                         method={method}
                         analyze={analyze}
+                        rows={rows}
                     />
                 )}
             </Grid>
