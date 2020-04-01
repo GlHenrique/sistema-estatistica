@@ -13,9 +13,10 @@ import { GridItem } from "../../pages/DescriptiveStatistics/styles";
 import PieChart from "../PieChart";
 import BarChat from "../BarChart";
 import BarSydeBarChart from "../BarSydeByBarChat";
+import capitalize from "../../utils/capitalize";
 
 export default function TableComponent(props) {
-    const {
+    let {
         variableName,
         total,
         method,
@@ -23,6 +24,7 @@ export default function TableComponent(props) {
         rows
     } = props;
     const classes = useStyles();
+    variableName = capitalize(variableName);
 
     return (
         <>

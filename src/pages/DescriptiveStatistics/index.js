@@ -35,12 +35,12 @@ export default function DescriptiveStatistics() {
 
     const classes = useStyles();
     const [isContinue, setIsContinue] = useState(false);
-    const [variableName, setVariableName] = useState('Cores');
-    const [method, setMethod] = useState('population');
-    const [analyze, setAnalyze] = useState('qualitative');
-    const [order, setOrder] = useState('false');
+    const [variableName, setVariableName] = useState('');
+    const [method, setMethod] = useState('');
+    const [analyze, setAnalyze] = useState('');
+    const [order, setOrder] = useState('');
     const [showOrder, setShowOrder] = useState(false);
-    const [values, setValues] = useState('azul;vermelho;vermelho;azul;verde;verde;amarelo');
+    const [values, setValues] = useState('');
     const [calculating, setCalculating] = useState(false);
     const [total, setTotal] = useState(0);
     const [showTable, setShowTable] = useState(false);
@@ -72,14 +72,14 @@ export default function DescriptiveStatistics() {
             isContinue: isContinue
         })
         .then(res => {
-            console.log(res);
             setDisableForm(true);
-            setTotal(res.data.total);
-            setRows(res.data.rows);
+            setTotal(res.total);
+            setRows(res.rows);
             setShowTable(true);
         })
-        .catch(error => {
+        .catch((error) => {
             console.log(error);
+            setShowSnackbar(true);
         })
         .finally(() => {
             setCalculating(false);
@@ -229,11 +229,13 @@ export default function DescriptiveStatistics() {
                                                 type="submit"
                                                 disabled={disableForm}
                                                 color="primary">
+                                                    
                                                 {calculating ?
                                                     <CircularProgress
                                                         size={20}
                                                         style={{color: 'rgb(220, 0, 78)'}}/>
                                                     : 'Calcular'}
+                                                    
                                             </Button>
                                         </Grid>
                                     </CardActions>
@@ -244,6 +246,7 @@ export default function DescriptiveStatistics() {
                 </Grid>
                 {showTable && (
                     <TableComponent
+                        id="table"
                         variableName={variablePropName}
                         total={total}
                         method={method}
