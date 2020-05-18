@@ -1,10 +1,8 @@
 import React from 'react';
-import Header from "../../components/Header";
+import Header from '../../components/Header';
 
 export default function Probability() {
-    document.title = 'Probabilidade';
+  document.title = 'Probabilidade';
 
-    return (
-        <Header titleToolbar="Lookup - Probabilidade"/>
-    )
+  return <Header titleToolbar="Lookup - Probabilidade" />;
 }
