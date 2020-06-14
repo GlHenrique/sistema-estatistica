@@ -18,9 +18,18 @@ import {
   Fab,
   Icon,
   Snackbar,
+  Select,
+  InputLabel,
+  MenuItem,
+  Slider,
 } from '@material-ui/core';
 import Header from '../../components/Header';
-import { FabContainer, useStyles } from './styles';
+import {
+  FabContainer,
+  useStyles,
+  SelectContainer,
+  SliderContainer,
+} from './styles';
 import GoBack from '../../components/GoBack';
 
 import TableComponent from '../../components/Table';
@@ -44,10 +53,15 @@ export default function DescriptiveStatistics() {
   const [variablePropName, setVariablePropName] = useState('');
   const [disableForm, setDisableForm] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
+  const [separatingMeasure, setSeparatingMeasures] = useState('quartil');
+  const [stepSlider, setStepSlider] = useState(25);
+  const [separatingMeasureValue, setSeparatingMeasureValue] = useState(0);
   const [rows, setRows] = useState([]);
   const [media, setMedia] = useState('');
   const [moda, setModa] = useState('');
   const [mediana, setMediana] = useState('');
+  const [desvioPadrao, setDesvioPadrao] = useState('');
+  const [variancia, setVariancia] = useState('');
 
   const handleCalculate = (event) => {
     event.preventDefault();
@@ -57,6 +71,10 @@ export default function DescriptiveStatistics() {
     }
     if (!analyze) {
       document.getElementsByName('analyze')[0].focus();
+      return false;
+    }
+    if (!separatingMeasureValue) {
+      setShowSnackbar(true);
       return false;
     }
     setVariablePropName(variableName);
@@ -71,6 +89,7 @@ export default function DescriptiveStatistics() {
         order,
         values: arrayFormatted,
         isContinue,
+        separatingMeasure: separatingMeasureValue,
       })
       .then((res) => {
         setDisableForm(true);
@@ -80,6 +99,8 @@ export default function DescriptiveStatistics() {
         setMedia(res.media);
         setModa(res.moda);
         setMediana(res.mediana);
+        setDesvioPadrao(res.desvioPadrao);
+        setVariancia(res.variancia);
       })
       .catch((error) => {
         console.log(error);
@@ -92,6 +113,24 @@ export default function DescriptiveStatistics() {
 
   const closeSnackbar = () => {
     setShowSnackbar(false);
+  };
+
+  const handleSeparatingMeasures = (event) => {
+    setSeparatingMeasures(event.target.value);
+    switch (event.target.value) {
+      case 'quartil':
+        setStepSlider(25);
+        break;
+      case 'quintil':
+        setStepSlider(20);
+        break;
+      case 'decil':
+        setStepSlider(10);
+        break;
+      default:
+        setStepSlider(1); // Porcentil
+        break;
+    }
   };
 
   useEffect(() => {
@@ -236,6 +275,40 @@ export default function DescriptiveStatistics() {
                       </RadioGroup>
                     </FormControl>
                   )}
+                  <SelectContainer>
+                    <FormControl variant="outlined" fullWidth>
+                      <InputLabel id="demo-simple-select-outlined-label">
+                        Medida Separatriz
+                      </InputLabel>
+                      <Select
+                        labelId="demo-simple-select-outlined-label"
+                        id="demo-simple-select-outlined"
+                        value={separatingMeasure}
+                        onChange={(event) => handleSeparatingMeasures(event)}
+                        label="Medida Separatriz"
+                      >
+                        <MenuItem value="quartil">Quartil</MenuItem>
+                        <MenuItem value="decil">Decil</MenuItem>
+                        <MenuItem value="quintil">Quintil</MenuItem>
+                        <MenuItem value="porcentil">Porcentil</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </SelectContainer>
+                  <SliderContainer>
+                    <Slider
+                      defaultValue={100}
+                      getAriaValueText={(value) => `${value}%`}
+                      aria-labelledby="discrete-slider"
+                      valueLabelDisplay="auto"
+                      step={stepSlider}
+                      onChange={(event, newValue) =>
+                        setSeparatingMeasureValue(newValue)
+                      }
+                      value={separatingMeasureValue}
+                      max={100}
+                    />
+                  </SliderContainer>
+
                   <Typography
                     variant="body2"
                     color="textSecondary"
@@ -294,6 +367,8 @@ export default function DescriptiveStatistics() {
             media={media}
             moda={moda}
             mediana={mediana}
+            desvioPadrao={desvioPadrao}
+            variancia={variancia}
           />
         )}
       </Grid>

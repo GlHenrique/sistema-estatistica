@@ -7,7 +7,7 @@ export const useStyles = makeStyles(() => ({
     height: 140,
   },
   formControl: {
-    margin: '24px 0 24px 0px',
+    marginTop: '8px',
   },
   cardSize: {
     width: '100%',
@@ -39,4 +39,12 @@ export const FabContainer = styled.div`
     right: 10px;
     bottom: 10px;
   }
+`;
+
+export const SelectContainer = styled.div`
+  margin: 8px 0 8px 0;
+`;
+
+export const SliderContainer = styled.div`
+  margin: 32px 8px;
 `;

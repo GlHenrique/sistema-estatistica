@@ -16,7 +16,17 @@ import BarSydeBarChart from '../BarSydeByBarChat';
 import capitalize from '../../utils/capitalize';
 
 export default function TableComponent(props) {
-  const { total, method, analyze, rows, media, moda, mediana } = props;
+  const {
+    total,
+    method,
+    analyze,
+    rows,
+    media,
+    moda,
+    mediana,
+    desvioPadrao,
+    variancia,
+  } = props;
   const classes = useStyles();
   let { variableName } = props;
   variableName = capitalize(variableName);
@@ -27,12 +37,14 @@ export default function TableComponent(props) {
         <TableContainer component={Paper}>
           <Table className={classes.table} aria-label="customized table">
             <caption>
-              Total: {total} <br />
               Dados coletados através de{' '}
               {method === 'population' ? 'população' : 'amostra'} <br />
+              Total: {total} <br />
               Média: {media} <br />
               Moda: {moda} <br />
-              Mediana: {mediana}
+              Mediana: {mediana} <br />
+              Desvio padrao: {desvioPadrao} <br />
+              Variância: {variancia}
             </caption>
             <TableHead>
               <TableRow>
