@@ -54,3 +54,9 @@ export const GridRate = styled(Grid)`
     flex-wrap: nowrap;
   }
 `;
+
+export const GridBetween = styled(Grid)`
+  @media (min-width: 390px) {
+    flex-wrap: nowrap;
+  }
+`;
