@@ -38,6 +38,15 @@ export default function Probability() {
   const [media, setMedia] = useState('');
   const [desvioPadrao, setDesvioPadrao] = useState('');
 
+  const [valueA, setValueA] = useState('');
+  const [valueB, setValueB] = useState('');
+  const [mediaUniforme, setMediaUniforme] = useState('');
+  const [desvioPadraoUniforme, setDesvioPadraoUniforme] = useState('');
+  const [
+    coeficienteVariacaoUniforme,
+    setCoeficienteVariacaoUniforme,
+  ] = useState('');
+
   const [probability, setProbability] = useState('');
 
   const handleSubmit = (event) => {
@@ -100,6 +109,42 @@ export default function Probability() {
           })
           .then((res) => setProbability(res.probabilidade));
         break;
+      case 'uniforme':
+        if (!valueA || !valueB) {
+          return;
+        }
+        if (mode === 'maiorq') {
+          if (!moreThan) {
+            return;
+          }
+        }
+        if (mode === 'menorq') {
+          if (!lessThan) {
+            return;
+          }
+        }
+        if (mode === 'entre') {
+          if (!betweenA || !betweenB) {
+            return;
+          }
+        }
+        api
+          .post('/probability', {
+            method,
+            moreThan,
+            lessThan,
+            betweenA,
+            betweenB,
+            valueA,
+            valueB,
+          })
+          .then((res) => {
+            setProbability(res.probabilidade);
+            setMediaUniforme(res.media);
+            setDesvioPadraoUniforme(res.desvioPadrao);
+            setCoeficienteVariacaoUniforme(res.coeficienteVariacao);
+          });
+        break;
       default:
         break;
     }
@@ -112,6 +157,13 @@ export default function Probability() {
     setSuccessRate('');
     setFailRate('');
     setEventSelected('');
+    setBetweenA('');
+    setBetweenB('');
+    setMoreThan('');
+    setLessThan('');
+    setMediaUniforme('');
+    setDesvioPadraoUniforme('');
+    setCoeficienteVariacaoUniforme('');
   };
 
   const handleMode = (event) => {
@@ -120,6 +172,9 @@ export default function Probability() {
     setLessThan('');
     setBetweenA('');
     setBetweenB('');
+    setMediaUniforme('');
+    setDesvioPadraoUniforme('');
+    setCoeficienteVariacaoUniforme('');
   };
 
   return (
@@ -307,6 +362,96 @@ export default function Probability() {
                       />
                     </>
                   )}
+                  {method === 'uniforme' && (
+                    <>
+                      <SelectContainer>
+                        <FormControl variant="outlined" fullWidth>
+                          <InputLabel id="demo-simple-select-outlined-mode">
+                            Modo:
+                          </InputLabel>
+                          <Select
+                            labelId="demo-simple-select-outlined-mode"
+                            value={mode}
+                            required
+                            onChange={(event) => handleMode(event)}
+                            label="Modo"
+                          >
+                            <MenuItem value="maiorq">Maior que</MenuItem>
+                            <MenuItem value="menorq">Menor que</MenuItem>
+                            <MenuItem value="entre">Entre</MenuItem>
+                          </Select>
+                        </FormControl>
+                      </SelectContainer>
+                      <TextField
+                        required
+                        label="Valor mínimo"
+                        variant="outlined"
+                        margin="normal"
+                        value={valueA}
+                        onChange={(event) => setValueA(event.target.value)}
+                        fullWidth
+                      />
+                      <TextField
+                        required
+                        label="Valor máximo"
+                        variant="outlined"
+                        margin="normal"
+                        value={valueB}
+                        onChange={(event) => setValueB(event.target.value)}
+                        fullWidth
+                      />
+                      {mode === 'maiorq' && (
+                        <TextField
+                          required
+                          label="Valor"
+                          variant="outlined"
+                          margin="none"
+                          value={moreThan}
+                          onChange={(event) => setMoreThan(event.target.value)}
+                          fullWidth
+                        />
+                      )}
+                      {mode === 'menorq' && (
+                        <TextField
+                          required
+                          label="Valor"
+                          variant="outlined"
+                          margin="none"
+                          value={lessThan}
+                          onChange={(event) => setLessThan(event.target.value)}
+                          fullWidth
+                        />
+                      )}
+                      {mode === 'entre' && (
+                        <GridBetween container>
+                          <TextField
+                            style={{ marginRight: 4 }}
+                            required
+                            label="Valor A"
+                            variant="outlined"
+                            margin="none"
+                            value={betweenA}
+                            onChange={(event) =>
+                              setBetweenA(event.target.value)
+                            }
+                            fullWidth
+                          />
+                          <TextField
+                            style={{ marginLeft: 4 }}
+                            required
+                            label="Valor B"
+                            variant="outlined"
+                            margin="none"
+                            value={betweenB}
+                            onChange={(event) =>
+                              setBetweenB(event.target.value)
+                            }
+                            fullWidth
+                          />
+                        </GridBetween>
+                      )}
+                    </>
+                  )}
                   <CardActions>
                     <Grid container justify="flex-end">
                       <Button
@@ -330,6 +475,27 @@ export default function Probability() {
                     <Grid container justify="center">
                       <Typography style={{ fontSize: 22 }} variant="h1">
                         Probabilidade: {probability}%
+                      </Typography>
+                    </Grid>
+                  )}
+                  {mediaUniforme && (
+                    <Grid container justify="center">
+                      <Typography style={{ fontSize: 22 }} variant="h1">
+                        Média: {mediaUniforme}
+                      </Typography>
+                    </Grid>
+                  )}
+                  {desvioPadraoUniforme && (
+                    <Grid container justify="center">
+                      <Typography style={{ fontSize: 22 }} variant="h1">
+                        Desvio padrão: {desvioPadraoUniforme}
+                      </Typography>
+                    </Grid>
+                  )}
+                  {coeficienteVariacaoUniforme && (
+                    <Grid container justify="center">
+                      <Typography style={{ fontSize: 22 }} variant="h1">
+                        Desvio padrão: {coeficienteVariacaoUniforme}
                       </Typography>
                     </Grid>
                   )}
