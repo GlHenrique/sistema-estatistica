@@ -12,8 +12,8 @@ const api =
 api.interceptors.response.use(
   (res) => res.data,
   (error) => {
-    if (error.response.data) {
-      return Promise.reject(error.response.data.errors[0]);
+    if (error.response?.data) {
+      return Promise.reject(error.response.data);
     }
     return Promise.reject(new Error('Erro desconhecido'));
   }

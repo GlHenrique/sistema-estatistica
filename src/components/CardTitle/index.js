@@ -10,7 +10,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import { useStyles } from './styles';
-import mindMap from '../../assets/images/mapa_mental.png';
+import mindMap from '../../assets/images/estatistica-descritiva.jpg';
 
 export default function CardTitle(props) {
   const classes = useStyles();

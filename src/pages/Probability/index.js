@@ -47,6 +47,8 @@ export default function Probability() {
     setCoeficienteVariacaoUniforme,
   ] = useState('');
 
+  const [loading, setLoading] = useState(false);
+
   const [probability, setProbability] = useState('');
 
   const handleSubmit = (event) => {
@@ -68,6 +70,7 @@ export default function Probability() {
         if (!eventSelected) {
           return;
         }
+        setLoading(true);
         api
           .post('probability', {
             method,
@@ -97,6 +100,7 @@ export default function Probability() {
             return;
           }
         }
+        setLoading(true);
         api
           .post('/probability', {
             method,
@@ -148,6 +152,7 @@ export default function Probability() {
       default:
         break;
     }
+    setLoading(false);
   };
 
   const handleMethod = (event) => {
@@ -460,7 +465,7 @@ export default function Probability() {
                         type="submit"
                         color="primary"
                       >
-                        {false ? (
+                        {loading ? (
                           <CircularProgress
                             size={20}
                             style={{ color: 'rgb(220, 0, 78)' }}
