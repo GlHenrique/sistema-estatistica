@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Grid,
   Paper,
@@ -14,12 +14,18 @@ import {
   CardActions,
   Button,
   CircularProgress,
+  FormLabel,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
 } from '@material-ui/core';
+import XLSX from 'xlsx';
 import { useStyles, SelectContainer } from './styles';
 import Header from '../../components/Header';
 import GoBack from '../../components/GoBack';
 import Snackbar from '../../components/Snackbar';
 import api from '../../services/api';
+import Upload from '../../components/Upload';
 
 export default function CorrelationRegression() {
   document.title = 'Correlação e Regressão';
@@ -33,6 +39,11 @@ export default function CorrelationRegression() {
   const [correlation, setCorrelation] = useState('');
   const [regression, setRegression] = useState('');
 
+  const [workbook, setWorkbook] = useState(null);
+  const [sheetNames, setSheetNames] = useState([]);
+  const [sheets, setSheets] = useState({});
+  const [sheet, setSheet] = useState('');
+
   const classes = useStyles();
 
   const handleMode = (event) => {
@@ -41,6 +52,53 @@ export default function CorrelationRegression() {
     setYValues('');
     setCorrelation('');
     setRegression('');
+  };
+
+  function handleFile(e) {
+    const { files } = e.target;
+    const f = files[0];
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const data = new Uint8Array(e.target.result);
+      setWorkbook(XLSX.read(data, { type: 'array' }));
+    };
+    reader.readAsArrayBuffer(f);
+  }
+
+  const handleReadSheet = (value) => {
+    delete sheets[value]['!margins'];
+    delete sheets[value]['!ref'];
+    delete sheets[value].A1;
+    delete sheets[value].B1;
+    const keys = Object.keys(sheets[value]);
+    const keysA = keys.filter((item, index) => index % 2 === 0);
+    const keysB = keys.filter((item, index) => index % 2 === 1);
+    const XValuesArray = keysA
+      .map((item) => sheets[value][item])
+      .map((item) => item.v);
+    const YValuesArray = keysB
+      .map((item) => sheets[value][item])
+      .map((item) => item.v);
+    setLoading(true);
+    api
+      .post('/correlation', {
+        xValues: XValuesArray,
+        yValues: YValuesArray,
+      })
+      .then((res) => {
+        setCorrelation(res.correlacaoLinear);
+        setRegression(res.regressaoLinear);
+      })
+      .catch((err) => {
+        setMessageSnackbar(err.error);
+        setShowSnackbar(true);
+      })
+      .finally(() => setLoading(false));
+  };
+
+  const handleSheet = (e) => {
+    setSheet(e.target.value);
+    handleReadSheet(e.target.value);
   };
 
   const handleSubmit = (e) => {
@@ -71,6 +129,13 @@ export default function CorrelationRegression() {
       })
       .finally(() => setLoading(false));
   };
+
+  useEffect(() => {
+    if (workbook) {
+      setSheetNames(workbook.SheetNames);
+      setSheets(workbook.Sheets);
+    }
+  }, [workbook]);
 
   return (
     <>
@@ -157,6 +222,32 @@ export default function CorrelationRegression() {
                         </Button>
                       </Grid>
                     </CardActions>
+                  )}
+                  {mode === 'upload' && (
+                    <>
+                      <Upload handleUploadFile={handleFile} />
+                      {sheetNames.length > 0 && (
+                        <FormControl margin="normal" component="fieldset">
+                          <FormLabel component="legend">
+                            Folhas disponíveis
+                          </FormLabel>
+                          <RadioGroup
+                            name="sheets"
+                            value={sheet}
+                            onChange={(e) => handleSheet(e)}
+                          >
+                            {sheetNames.map((item) => (
+                              <FormControlLabel
+                                value={item}
+                                key={item}
+                                control={<Radio />}
+                                label={item}
+                              />
+                            ))}
+                          </RadioGroup>
+                        </FormControl>
+                      )}
+                    </>
                   )}
                   {correlation && (
                     <Grid container justify="center">
