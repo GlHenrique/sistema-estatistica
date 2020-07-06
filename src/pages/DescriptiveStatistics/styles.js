@@ -15,6 +15,7 @@ export const useStyles = makeStyles(() => ({
   },
   cardActions: {
     padding: 0,
+    marginTop: 16,
   },
 }));
 

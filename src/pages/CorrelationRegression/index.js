@@ -26,6 +26,7 @@ import GoBack from '../../components/GoBack';
 import Snackbar from '../../components/Snackbar';
 import api from '../../services/api';
 import Upload from '../../components/Upload';
+import LineChart from '../../components/LineChart';
 
 export default function CorrelationRegression() {
   document.title = 'Correlação e Regressão';
@@ -43,6 +44,7 @@ export default function CorrelationRegression() {
   const [sheetNames, setSheetNames] = useState([]);
   const [sheets, setSheets] = useState({});
   const [sheet, setSheet] = useState('');
+  const [dataChart, setDataChart] = useState([]);
 
   const classes = useStyles();
 
@@ -88,12 +90,15 @@ export default function CorrelationRegression() {
       .then((res) => {
         setCorrelation(res.correlacaoLinear);
         setRegression(res.regressaoLinear);
+        setDataChart(res.dataChart);
       })
       .catch((err) => {
         setMessageSnackbar(err.error);
         setShowSnackbar(true);
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   const handleSheet = (e) => {
@@ -122,12 +127,15 @@ export default function CorrelationRegression() {
       .then((res) => {
         setCorrelation(res.correlacaoLinear);
         setRegression(res.regressaoLinear);
+        setDataChart(res.dataChart);
       })
       .catch((err) => {
         setMessageSnackbar(err.error);
         setShowSnackbar(true);
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   useEffect(() => {
@@ -152,7 +160,7 @@ export default function CorrelationRegression() {
               <Box display="flex" alignItems="center">
                 <GoBack />
                 <Typography variant="h5" component="h2">
-                  Probabilidade
+                  Correlação e Regressão
                 </Typography>
               </Box>
               <form onSubmit={handleSubmit}>
@@ -274,6 +282,11 @@ export default function CorrelationRegression() {
             </Card>
           </Paper>
         </Grid>
+        {correlation && regression && (
+          <Grid item className={classes.cardSize}>
+            <LineChart values={dataChart} />
+          </Grid>
+        )}
       </Grid>
     </>
   );

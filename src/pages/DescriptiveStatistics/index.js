@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import XLSX from 'xlsx';
 import {
   Paper,
   Grid,
@@ -22,8 +23,10 @@ import {
   InputLabel,
   MenuItem,
   Slider,
+  Switch,
 } from '@material-ui/core';
 import Header from '../../components/Header';
+import Upload from '../../components/Upload';
 import {
   FabContainer,
   useStyles,
@@ -62,6 +65,11 @@ export default function DescriptiveStatistics() {
   const [mediana, setMediana] = useState('');
   const [desvioPadrao, setDesvioPadrao] = useState('');
   const [variancia, setVariancia] = useState('');
+  const [upload, setUpload] = useState(false);
+  const [workbook, setWorkbook] = useState(null);
+  const [sheetNames, setSheetNames] = useState([]);
+  const [sheets, setSheets] = useState({});
+  const [sheet, setSheet] = useState('');
 
   const handleCalculate = (event) => {
     event.preventDefault();
@@ -78,8 +86,13 @@ export default function DescriptiveStatistics() {
       return false;
     }
     setVariablePropName(variableName);
-    let arrayFormatted = values.split(';');
-    arrayFormatted = arrayFormatted.filter((item) => item !== ''); // Removendo index vazios.
+    let arrayFormatted;
+    if (!upload) {
+      arrayFormatted = values.split(';');
+      arrayFormatted = arrayFormatted.filter((item) => item !== ''); // Removendo index vazios.
+    } else {
+      arrayFormatted = values;
+    }
     setCalculating(true);
     return api
       .post('/calculate', {
@@ -133,6 +146,33 @@ export default function DescriptiveStatistics() {
     }
   };
 
+  const handleReadSheet = (value) => {
+    delete sheets[value]['!margins'];
+    delete sheets[value]['!ref'];
+    delete sheets[value].A1;
+    const keys = Object.keys(sheets[value]);
+    const XValuesArray = keys
+      .map((item) => sheets[value][item])
+      .map((item) => item.v);
+    setValues(XValuesArray);
+  };
+
+  function handleFile(e) {
+    const { files } = e.target;
+    const f = files[0];
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const data = new Uint8Array(e.target.result);
+      setWorkbook(XLSX.read(data, { type: 'array' }));
+    };
+    reader.readAsArrayBuffer(f);
+  }
+
+  const handleSheet = (e) => {
+    setSheet(e.target.value);
+    handleReadSheet(e.target.value);
+  };
+
   useEffect(() => {
     if (analyze === 'qualitative') {
       setShowOrder(true);
@@ -146,6 +186,13 @@ export default function DescriptiveStatistics() {
       setIsContinue(false);
     }
   }, [analyze, isContinue]);
+
+  useEffect(() => {
+    if (workbook) {
+      setSheetNames(workbook.SheetNames);
+      setSheets(workbook.Sheets);
+    }
+  }, [workbook]);
 
   function handleReload() {
     window.location.reload();
@@ -308,29 +355,65 @@ export default function DescriptiveStatistics() {
                       max={100}
                     />
                   </SliderContainer>
-
-                  <Typography
-                    variant="body2"
-                    color="textSecondary"
-                    component="p"
-                  >
-                    Inserção manual de valores:
-                  </Typography>
-                  <Box className={classes.formControl}>
-                    <TextField
-                      label="Elementos"
-                      multiline
-                      rows="4"
-                      variant="outlined"
-                      required
-                      fullWidth
-                      disabled={disableForm}
-                      value={values}
-                      inputProps={{ spellCheck: false }}
-                      onChange={(event) => setValues(event.target.value)}
-                      placeholder="Insira os valores separados por ponto e vírgula (;)"
+                  <Grid alignItems="center" justify="space-between" container>
+                    <Typography
+                      variant="body2"
+                      color="textSecondary"
+                      component="p"
+                    >
+                      Inserção automática de valores:
+                    </Typography>
+                    <Switch
+                      checked={upload}
+                      onChange={() => setUpload(!upload)}
+                      name="uploadSwitch"
+                      color="primary"
                     />
-                  </Box>
+                  </Grid>
+                  {upload && (
+                    <>
+                      <Upload handleUploadFile={handleFile} />
+                      {sheetNames.length > 0 && (
+                        <FormControl margin="normal" component="fieldset">
+                          <FormLabel component="legend">
+                            Folhas disponíveis
+                          </FormLabel>
+                          <RadioGroup
+                            name="sheets"
+                            value={sheet}
+                            onChange={(e) => handleSheet(e)}
+                          >
+                            {sheetNames.map((item) => (
+                              <FormControlLabel
+                                value={item}
+                                key={item}
+                                control={<Radio />}
+                                label={item}
+                              />
+                            ))}
+                          </RadioGroup>
+                        </FormControl>
+                      )}
+                    </>
+                  )}
+                  {!upload && (
+                    <Box className={classes.formControl}>
+                      <TextField
+                        label="Elementos"
+                        multiline
+                        rows="4"
+                        variant="outlined"
+                        required
+                        fullWidth
+                        disabled={disableForm || upload}
+                        value={values}
+                        inputProps={{ spellCheck: false }}
+                        onChange={(event) => setValues(event.target.value)}
+                        placeholder="Insira os valores separados por ponto e vírgula (;)"
+                      />
+                    </Box>
+                  )}
+
                   <CardActions className={classes.cardActions}>
                     <Grid container justify="flex-end">
                       <Button
@@ -340,14 +423,13 @@ export default function DescriptiveStatistics() {
                         disabled={disableForm}
                         color="primary"
                       >
-                        {calculating ? (
+                        {calculating && (
                           <CircularProgress
                             size={20}
                             style={{ color: 'rgb(220, 0, 78)' }}
                           />
-                        ) : (
-                          'Calcular'
                         )}
+                        {!calculating && 'Calcular'}
                       </Button>
                     </Grid>
                   </CardActions>

@@ -1,50 +1,33 @@
 import React from 'react';
 import {
-  Button,
   Card,
   CardActionArea,
-  CardActions,
   CardContent,
   CardMedia,
   Paper,
   Typography,
 } from '@material-ui/core';
 import { useStyles } from './styles';
-import mindMap from '../../assets/images/estatistica-descritiva.jpg';
 
 export default function CardTitle(props) {
   const classes = useStyles();
-  const { title } = props;
+  const { title, content, image, onPress } = props;
 
   return (
     <Paper elevation={3}>
-      <Card className={classes.cardWidth}>
-        <CardActionArea>
-          <CardMedia
-            component="img"
-            alt="Contemplative Reptile"
-            height="200"
-            image={mindMap}
-            title="Contemplative Reptile"
-          />
+      <CardActionArea onClick={onPress}>
+        <Card style={{ minHeight: 400 }} className={classes.cardWidth}>
+          <CardMedia component="img" height="200" image={image} />
           <CardContent>
             <Typography gutterBottom variant="h5" component="h2">
               {title}
             </Typography>
             <Typography variant="body2" color="textSecondary" component="p">
-              A estatística descritiva é a etapa inicial da análise utilizada
-              para descrever e resumir os dados. A disponibilidade de uma grande
-              quantidade de dados e de métodos computacionais muito eficientes
-              revigorou está área da estatística.
+              {content}
             </Typography>
           </CardContent>
-        </CardActionArea>
-        <CardActions>
-          <Button size="small" color="primary">
-            SHOW MORE
-          </Button>
-        </CardActions>
-      </Card>
+        </Card>
+      </CardActionArea>
     </Paper>
   );
 }

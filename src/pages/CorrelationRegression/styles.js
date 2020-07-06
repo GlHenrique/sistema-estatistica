@@ -12,6 +12,7 @@ export const useStyles = makeStyles(() => ({
   cardSize: {
     width: '100%',
     maxWidth: '600px',
+    margin: 8,
   },
   cardActions: {
     padding: 0,
