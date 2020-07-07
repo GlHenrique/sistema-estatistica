@@ -1,12 +1,13 @@
 import { makeStyles } from '@material-ui/core/styles';
 import styled from 'styled-components';
+import backgroundLogin from '../../assets/images/arizona.jpg';
 
 export const useStyles = makeStyles((theme) => ({
   root: {
     height: '100vh',
   },
   image: {
-    backgroundImage: 'url(https://source.unsplash.com/random)',
+    backgroundImage: `url(${backgroundLogin})`,
     backgroundRepeat: 'no-repeat',
     backgroundColor:
       theme.palette.type === 'dark'

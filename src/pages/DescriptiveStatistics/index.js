@@ -65,6 +65,7 @@ export default function DescriptiveStatistics() {
   const [mediana, setMediana] = useState('');
   const [desvioPadrao, setDesvioPadrao] = useState('');
   const [variancia, setVariancia] = useState('');
+  const [medidaSeparatriz, setMedidaSeparatriz] = useState('');
   const [upload, setUpload] = useState(false);
   const [workbook, setWorkbook] = useState(null);
   const [sheetNames, setSheetNames] = useState([]);
@@ -114,6 +115,7 @@ export default function DescriptiveStatistics() {
         setMediana(res.mediana);
         setDesvioPadrao(res.desvioPadrao);
         setVariancia(res.variancia);
+        setMedidaSeparatriz(res.medidaSeparatriz);
       })
       .catch((error) => {
         console.log(error);
@@ -157,9 +159,15 @@ export default function DescriptiveStatistics() {
     setValues(XValuesArray);
   };
 
-  function handleFile(e) {
-    const { files } = e.target;
-    const f = files[0];
+  function handleFile(e, droppedFile = null) {
+    let f;
+    if (droppedFile) {
+      f = droppedFile;
+    } else {
+      const { files } = e.target;
+      // eslint-disable-next-line prefer-destructuring
+      f = files[0];
+    }
     const reader = new FileReader();
     reader.onload = (e) => {
       const data = new Uint8Array(e.target.result);
@@ -451,6 +459,7 @@ export default function DescriptiveStatistics() {
             mediana={mediana}
             desvioPadrao={desvioPadrao}
             variancia={variancia}
+            medidaSeparatriz={medidaSeparatriz}
           />
         )}
       </Grid>

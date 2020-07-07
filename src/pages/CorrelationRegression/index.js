@@ -56,9 +56,15 @@ export default function CorrelationRegression() {
     setRegression('');
   };
 
-  function handleFile(e) {
-    const { files } = e.target;
-    const f = files[0];
+  function handleFile(e, droppedFile = null) {
+    let f;
+    if (droppedFile) {
+      f = droppedFile;
+    } else {
+      const { files } = e.target;
+      // eslint-disable-next-line prefer-destructuring
+      f = files[0];
+    }
     const reader = new FileReader();
     reader.onload = (e) => {
       const data = new Uint8Array(e.target.result);

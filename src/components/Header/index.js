@@ -6,7 +6,6 @@ import {
   IconButton,
   List,
   ListItem,
-  ListItemIcon,
   ListItemText,
   Menu,
   MenuItem,
@@ -17,7 +16,6 @@ import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import PowerSettingsNew from '@material-ui/icons/PowerSettingsNew';
 import { Link } from 'react-router-dom';
-import { IoMdAnalytics } from 'react-icons/io';
 import app from '../../base';
 import { Background, useStyles } from '../../pages/Home/styles';
 import background from '../../assets/images/lightPurpleHeader.svg';
@@ -80,9 +78,6 @@ export default function Header(props) {
         {menu.map((item) => (
           <Link className={classes.link} key={item.path} to={item.path}>
             <ListItem button>
-              <ListItemIcon>
-                <IoMdAnalytics />
-              </ListItemIcon>
               <ListItemText primary={item.name} />
             </ListItem>
           </Link>

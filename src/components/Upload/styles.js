@@ -4,7 +4,7 @@ export const Container = styled.div`
   display: flex;
   border: 1px dashed;
   border-radius: 4px;
-  border-color: #e91e63;
+  border-color: ${(props) => (props.dragActive ? '#2E7D32' : '#E91E63')};
   width: 100%;
   margin-top: 16px;
   margin-bottom: 8px;

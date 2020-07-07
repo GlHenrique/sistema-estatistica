@@ -26,6 +26,7 @@ export default function TableComponent(props) {
     mediana,
     desvioPadrao,
     variancia,
+    medidaSeparatriz,
   } = props;
   const classes = useStyles();
   let { variableName } = props;
@@ -43,8 +44,9 @@ export default function TableComponent(props) {
               Média: {media} <br />
               Moda: {moda} <br />
               Mediana: {mediana} <br />
-              Desvio padrao: {desvioPadrao} <br />
-              Variância: {variancia}
+              Desvio padrão: {desvioPadrao || 'Não possui'} <br />
+              Variância: {variancia || 'Não possui'} <br />
+              Medida Separatriz: {medidaSeparatriz}
             </caption>
             <TableHead>
               <TableRow>

@@ -50,6 +50,7 @@
       "no-nested-ternary": "off",
       "jsx-a11y/anchor-is-valid": "off",
       "no-plusplus": "off",
-      "dot-notation":"off"
+      "dot-notation":"off",
+      "no-alert":"off"
     }
 }

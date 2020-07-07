@@ -85,6 +85,19 @@ function Login({ history }) {
     [history]
   );
 
+  const handleForgotPassword = () => {
+    const email = prompt('Insira seu email:');
+    if (email) {
+      app
+        .auth()
+        .sendPasswordResetEmail(email)
+        .then(() => {
+          alert('Sucesso! Verifique sua caixa de email e spam');
+        })
+        .catch(() => alert('Email não encontrado'));
+    }
+  };
+
   useEffect(() => {
     if (wrongPassword) {
       setWrongPassword(false);
@@ -165,7 +178,7 @@ function Login({ history }) {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
+                <Link onClick={handleForgotPassword} href="#" variant="body2">
                   Esqueceu sua senha?
                 </Link>
               </Grid>

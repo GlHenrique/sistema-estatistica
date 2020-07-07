@@ -61,9 +61,6 @@ function SignUp({ history }) {
     }
     const result = FormValidators.emailValidator(email);
     setErrorEmail(!result);
-    if (errorDuplicatedEmail) {
-      setErrorDuplicatedEmail(false);
-    }
   }, [email, errorDuplicatedEmail]);
 
   useEffect(() => {
@@ -179,7 +176,7 @@ function SignUp({ history }) {
               {loading ? (
                 <CircularProgress style={{ color: 'rgb(220, 0, 78)' }} />
               ) : (
-                'Entrar'
+                'Cadastrar'
               )}
             </Button>
           </form>
