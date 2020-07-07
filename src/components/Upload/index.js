@@ -8,9 +8,12 @@ import { Container, Content } from './styles';
 export default function Upload(props) {
   const { handleUploadFile } = props;
   const inputElement = useRef(null);
-  const onDrop = useCallback((acceptedFiles) => {
-    handleUploadFile(null, acceptedFiles[0]);
-  }, []);
+  const onDrop = useCallback(
+    (acceptedFiles) => {
+      handleUploadFile(null, acceptedFiles[0]);
+    },
+    [handleUploadFile]
+  );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
