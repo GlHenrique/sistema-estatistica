@@ -151,7 +151,6 @@ export default function DescriptiveStatistics() {
   const handleReadSheet = (value) => {
     delete sheets[value]['!margins'];
     delete sheets[value]['!ref'];
-    delete sheets[value].A1;
     const keys = Object.keys(sheets[value]);
     const XValuesArray = keys
       .map((item) => sheets[value][item])

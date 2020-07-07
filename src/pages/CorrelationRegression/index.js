@@ -76,8 +76,6 @@ export default function CorrelationRegression() {
   const handleReadSheet = (value) => {
     delete sheets[value]['!margins'];
     delete sheets[value]['!ref'];
-    delete sheets[value].A1;
-    delete sheets[value].B1;
     const keys = Object.keys(sheets[value]);
     const keysA = keys.filter((item, index) => index % 2 === 0);
     const keysB = keys.filter((item, index) => index % 2 === 1);
